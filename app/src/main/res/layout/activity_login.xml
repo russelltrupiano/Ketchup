@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".LoginActivity">
+
+
+    <LinearLayout
+        android:id="@+id/login_linear_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/login_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="69dp"
+            android:text="Ketchup"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/appAccent"
+            android:textSize="50sp" />
+
+        <LinearLayout
+            android:id="@+id/login_buttons_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/login_header"
+            android:layout_marginTop="60dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/signup_button"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/login_header"
+                android:layout_weight=".495"
+                android:background="@color/appRedDark"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Sign Up"
+
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:focusable="false"
+                android:onClick="loadSignupFragment" />
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="50dp"
+                android:layout_weight=".01"
+                android:background="#adadad" />
+
+            <Button
+                android:id="@+id/login_button"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_alignTop="@+id/signup_button"
+                android:layout_toEndOf="@+id/signup_button"
+                android:layout_weight=".495"
+                android:background="@color/appRedDark"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Log In"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:onClick="loadLoginFragment" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignStart="@+id/login_linear_layout"
+        android:layout_below="@+id/login_linear_layout"
+        android:background="@color/appRed"
+        android:orientation="vertical"
+        android:id="@+id/fragment_container">
+
+        <!--FRAGMENT WILL GO HERE-->
+
+        <!--<fragment-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:name="org.eecs499.russtrup.ketchup.SignupFragment"-->
+            <!--android:id="@+id/fragment"-->
+            <!--android:layout_gravity="center_horizontal" />-->
+    </LinearLayout>
+
+</RelativeLayout>

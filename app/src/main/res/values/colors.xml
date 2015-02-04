@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="appRed">#ef4545</color>
+    <color name="appRedDark">#ce202c</color>
+    <color name="appText">#ffffff</color>
+    <color name="appAccent">#ffcc66</color>
+    <color name="gradient_start">#838383</color>
+</resources>
