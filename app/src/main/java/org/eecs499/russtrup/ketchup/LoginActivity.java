@@ -1,15 +1,18 @@
 package org.eecs499.russtrup.ketchup;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 
 
 public class LoginActivity
@@ -27,7 +30,6 @@ public class LoginActivity
         setContentView(R.layout.activity_login);
         loadSignupFragment(null);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -8,11 +8,13 @@ import android.view.MenuItem;
 
 
 public class MainActivity extends BaseActivity
-implements ContentFragment.OnFragmentInteractionListener{
+    implements ContentFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        loadCurrentFragment();
     }
 
     @Override
