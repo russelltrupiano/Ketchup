@@ -1,8 +1,6 @@
 package org.eecs499.russtrup.ketchup;
 
-import android.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -12,14 +10,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 
 // This class exists to enable efficient use of the Toolbar to allow
@@ -37,7 +30,6 @@ public abstract class BaseActivity extends ActionBarActivity
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mRecyclerViewAdapter;
-    private RecyclerView.LayoutManager navigationLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +76,7 @@ public abstract class BaseActivity extends ActionBarActivity
     private void initView() {
 
         String[] nav_items = getResources().getStringArray(R.array.nav_items);
-//        String[] nav_icons = getResources().getStringArray(R.array.nav_icons);
         int nav_icons[] = {R.drawable.ic_action_computer,R.drawable.ic_action_computer,R.drawable.ic_action_settings};
-        int[] nav_ids = {0, 1, 2};
         String NAME = "Russell Trupiano";
         String EMAIL = "russelltrupiano@gmail.com";
         int PIC = R.drawable.ic_launcher;

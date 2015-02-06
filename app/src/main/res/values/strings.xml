@@ -23,5 +23,14 @@
     <string name="title_activity_drawer">DrawerActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in">Log In</string>
+    <string name="find_shows">Find Shows</string>
+    <string name="email_address_prompt">email address</string>
+    <string name="password_prompt">password</string>
+    <string name="my_shows">My Shows</string>
+    <string name="settings">Settings</string>
+    <string name="retype_password_prompt">retype password</string>
+    <string name="row_icon_description">row icon</string>
 
 </resources>

@@ -12,11 +12,12 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:hint="email address"
+        android:hint="@string/email_address_prompt"
         android:inputType="textEmailAddress"
-        android:textStyle="normal" >
+        android:textStyle="normal">
+
         <requestFocus />
-        </EditText>
+    </EditText>
 
     <EditText
         android:id="@+id/login_fragment_password"
@@ -26,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:ems="10"
-        android:hint="password"
+        android:hint="@string/password_prompt"
         android:inputType="textPassword"
         android:typeface="normal" />
 
@@ -36,11 +37,11 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/login_fragment_password"
         android:layout_below="@+id/login_fragment_password"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="20dp"
         android:clickable="true"
         android:onClick="logInUser"
-        android:text="Log In"
+        android:text="@string/log_in"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/appAccent"
         android:textSize="25sp" />
