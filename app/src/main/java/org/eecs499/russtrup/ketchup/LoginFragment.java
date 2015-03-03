@@ -15,6 +15,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+//
+import java.util.HashMap;
 
 
 /**
@@ -73,12 +88,22 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_login, container, false);
-        EditText password = (EditText) v.findViewById(R.id.login_fragment_password);
+        final EditText email = (EditText) v.findViewById(R.id.login_fragment_email);
+        final EditText password = (EditText) v.findViewById(R.id.login_fragment_password);
 
         if (password != null) {
             password.setTypeface(Typeface.DEFAULT);
             password.setTransformationMethod(new PasswordTransformationMethod());
         }
+
+        TextView logInBtn = (TextView) v.findViewById(R.id.login_fragment_submit);
+        logInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KetchupAPI.loginUser(email.getText().toString(), password.getText().toString());
+            }
+        });
+
         return v;
     }
 

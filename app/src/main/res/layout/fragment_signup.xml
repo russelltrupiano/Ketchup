@@ -48,6 +48,8 @@
         android:layout_below="@+id/signup_fragment_password2"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:background="@drawable/submitlogin_ripple"
         android:clickable="true"
         android:text="@string/sign_up"
         android:textAppearance="?android:attr/textAppearanceLarge"

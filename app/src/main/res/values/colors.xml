@@ -5,4 +5,5 @@
     <color name="appText">#ffffff</color>
     <color name="appAccent">#ffcc66</color>
     <color name="gradient_start">#838383</color>
+    <color name="navItemBackground">#333333</color>
 </resources>

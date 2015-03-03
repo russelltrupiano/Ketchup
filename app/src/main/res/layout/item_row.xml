@@ -1,44 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.andexert.library.RippleView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ripple="http://schemas.android.com/tools"
-    android:id="@+id/more"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    ripple:rv_centered="true"
-    ripple:rv_rippleDuration="800"
-    ripple:rv_type="1">
+    android:layout_height="wrap_content"
+    android:background="@drawable/navitem_ripple"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
 
-    <LinearLayout xmlns:ripple="http://schemas.android.com/tools"
-        android:layout_width="fill_parent"
+
+    <ImageView
+        android:id="@+id/rowIcon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#333333"
-        android:clickable="true"
-        android:orientation="horizontal"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp">
+        android:contentDescription="@string/row_icon_description"
+        android:paddingEnd="0dp"
+        android:paddingStart="16dp"
+        android:src="@drawable/ic_action_settings" />
 
+    <TextView
+        android:id="@+id/rowText"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="2dp"
+        android:paddingEnd="0dp"
+        android:paddingStart="12dp"
+        android:paddingTop="4dp"
+        android:text=""
+        android:textAlignment="gravity"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <ImageView
-            android:id="@+id/rowIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/row_icon_description"
-            android:paddingEnd="0dp"
-            android:paddingStart="16dp"
-            android:src="@drawable/ic_action_settings" />
-
-        <TextView
-            android:id="@+id/rowText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="2dp"
-            android:paddingEnd="0dp"
-            android:paddingStart="12dp"
-            android:paddingTop="4dp"
-            android:text=""
-            android:textAlignment="gravity"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    </LinearLayout>
-</com.andexert.library.RippleView>
+</LinearLayout>

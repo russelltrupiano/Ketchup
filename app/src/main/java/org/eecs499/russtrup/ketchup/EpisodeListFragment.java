@@ -3,22 +3,21 @@ package org.eecs499.russtrup.ketchup;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FindShowsFragment.OnFragmentInteractionListener} interface
+ * {@link EpisodeListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FindShowsFragment#newInstance} factory method to
+ * Use the {@link EpisodeListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FindShowsFragment extends ContentFragment {
+public class EpisodeListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,11 +35,11 @@ public class FindShowsFragment extends ContentFragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FindShowsFragment.
+     * @return A new instance of fragment EpisodeListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FindShowsFragment newInstance(String param1, String param2) {
-        FindShowsFragment fragment = new FindShowsFragment();
+    public static EpisodeListFragment newInstance(String param1, String param2) {
+        EpisodeListFragment fragment = new EpisodeListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -48,7 +47,7 @@ public class FindShowsFragment extends ContentFragment {
         return fragment;
     }
 
-    public FindShowsFragment() {
+    public EpisodeListFragment() {
         // Required empty public constructor
     }
 
@@ -65,9 +64,7 @@ public class FindShowsFragment extends ContentFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View fragmentView = inflater.inflate(R.layout.fragment_find_shows, container, false);
-        return fragmentView;
+        return inflater.inflate(R.layout.fragment_episode_list, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -108,4 +105,5 @@ public class FindShowsFragment extends ContentFragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
 }

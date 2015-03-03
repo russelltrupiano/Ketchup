@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 /**
@@ -69,19 +70,31 @@ public class SignupFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_signup, container, false);
 
-        EditText password = (EditText) v.findViewById(R.id.signup_fragment_password1);
+        final EditText email = (EditText) v.findViewById(R.id.signup_fragment_email);
+
+        final EditText password = (EditText) v.findViewById(R.id.signup_fragment_password1);
 
         if (password != null) {
             password.setTypeface(Typeface.DEFAULT);
             password.setTransformationMethod(new PasswordTransformationMethod());
         }
 
-        password = (EditText) v.findViewById(R.id.signup_fragment_password2);
+        final EditText password2 = (EditText) v.findViewById(R.id.signup_fragment_password2);
 
-        if (password != null) {
-            password.setTypeface(Typeface.DEFAULT);
-            password.setTransformationMethod(new PasswordTransformationMethod());
+        if (password2 != null) {
+            password2.setTypeface(Typeface.DEFAULT);
+            password2.setTransformationMethod(new PasswordTransformationMethod());
         }
+
+        TextView logInBtn = (TextView) v.findViewById(R.id.signup_fragment_submit);
+        logInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (password.getText().toString().equals(password2.getText().toString())) {
+                    KetchupAPI.signupUser(email.getText().toString(), password.getText().toString());
+                }
+            }
+        });
         return v;
     }
 

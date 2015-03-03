@@ -4,23 +4,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-//import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-//import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 
 
 public class LoginActivity
         extends ActionBarActivity
         implements  LoginFragment.OnFragmentInteractionListener,
                     SignupFragment.OnFragmentInteractionListener {
-
-//    GestureDetectorCompat mGestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +26,7 @@ public class LoginActivity
 
         setContentView(R.layout.activity_login);
         loadSignupFragment(null);
-
-//        mGestureDetector = new GestureDetectorCompat(this, new MyGestureListener());
-
-//        setupGestureDetector();
     }
-
-//    private void setupGestureDetector() {
-
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -85,12 +72,9 @@ public class LoginActivity
 
     }
 
-    public void logInUser(View v) {
+    public void logInUser(String email, String password) {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
-//
-//    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-//
-//    }
 }

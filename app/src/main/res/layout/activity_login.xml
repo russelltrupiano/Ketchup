@@ -35,11 +35,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
                 android:layout_weight=".495"
-                android:background="@color/appRedDark"
+                android:background="@drawable/loginbutton_ripple"
                 android:clickable="true"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-
                 android:gravity="center_vertical|center_horizontal"
                 android:onClick="loadSignupFragment"
                 android:text="@string/sign_up"
@@ -56,7 +54,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
                 android:layout_weight=".495"
-                android:background="@color/appRedDark"
+                android:background="@drawable/loginbutton_ripple"
                 android:clickable="true"
                 android:gravity="center_vertical|center_horizontal"
                 android:onClick="loadLoginFragment"
@@ -76,12 +74,6 @@
 
         <!--FRAGMENT WILL GO HERE-->
 
-        <!--<fragment-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:name="org.eecs499.russtrup.ketchup.SignupFragment"-->
-        <!--android:id="@+id/fragment"-->
-        <!--android:layout_gravity="center_horizontal" />-->
     </LinearLayout>
 
 
