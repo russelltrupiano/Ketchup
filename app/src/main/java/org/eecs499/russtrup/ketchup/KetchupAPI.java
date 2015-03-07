@@ -1,7 +1,6 @@
 package org.eecs499.russtrup.ketchup;
 
 import android.app.Application;
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -11,14 +10,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class KetchupAPI extends Application {
