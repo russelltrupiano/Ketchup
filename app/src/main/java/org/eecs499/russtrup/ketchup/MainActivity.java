@@ -12,9 +12,10 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        loadCurrentFragment();
+        if (KetchupAPI.checkLogin()) {
+            loadCurrentFragment();
+        }
     }
 
     @Override

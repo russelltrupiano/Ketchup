@@ -6,11 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.json.JSONObject;
 
 
 /**
@@ -91,11 +94,30 @@ public class SignupFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (password.getText().toString().equals(password2.getText().toString())) {
-                    KetchupAPI.signupUser(email.getText().toString(), password.getText().toString());
+                    KetchupAPI.signupUser(email.getText().toString(), password.getText().toString(), new SignupCallback(v));
                 }
             }
         });
         return v;
+    }
+
+    public class SignupCallback implements KetchupAPI.HTTPCallback {
+
+        View redirectView;
+
+        public SignupCallback(View v) {
+            redirectView = v;
+        }
+
+        @Override
+        public void invokeCallback(JSONObject response) {
+            LoginActivity.redirectHome(redirectView.getContext());
+        }
+
+        @Override
+        public void onFail() {
+            Log.i("CALLBACK", "Signup Failed");
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

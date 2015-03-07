@@ -100,11 +100,30 @@ public class LoginFragment extends Fragment {
         logInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KetchupAPI.loginUser(email.getText().toString(), password.getText().toString());
+                KetchupAPI.loginUser(email.getText().toString(), password.getText().toString(), new LoginCallback(v));
             }
         });
 
         return v;
+    }
+
+    public class LoginCallback implements KetchupAPI.HTTPCallback {
+
+        View redirectView;
+
+        public LoginCallback(View v) {
+            redirectView = v;
+        }
+
+        @Override
+        public void invokeCallback(JSONObject response) {
+            LoginActivity.redirectHome(redirectView.getContext());
+        }
+
+        @Override
+        public void onFail() {
+            Log.i("CALLBACK", "Login Failed");
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

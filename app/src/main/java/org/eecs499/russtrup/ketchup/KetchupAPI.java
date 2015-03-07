@@ -14,9 +14,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class KetchupAPI extends Application {
@@ -36,7 +38,15 @@ public class KetchupAPI extends Application {
      */
     private static KetchupAPI sInstance;
 
-    public static final String baseUrl = "http://62e05ac9.ngrok.com/api/v1";
+    private static SessionManager session;
+
+    public static String baseUrl = "http://77669c30.ngrok.com/api/v1";
+//    public static String baseUrl = "http://www.ketchuptv.me/api/v1";
+
+    public interface HTTPCallback {
+        void invokeCallback(JSONObject response);
+        void onFail();
+    }
 
     @Override
     public void onCreate() {
@@ -44,6 +54,8 @@ public class KetchupAPI extends Application {
 
         // initialize the singleton
         sInstance = this;
+
+        session = new SessionManager(getApplicationContext());
     }
 
     /**
@@ -106,7 +118,7 @@ public class KetchupAPI extends Application {
         }
     }
 
-    public static void loginUser(String email, String password) {
+    public static void loginUser(String email, String password, final HTTPCallback callback ) {
         HashMap<String, String> params = new HashMap<>();
         params.put("email", email);
         params.put("password", password);
@@ -117,11 +129,14 @@ public class KetchupAPI extends Application {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.i("HTTP SUCCESS", response.toString());
+                            Log.i("HTTP SUCCESS", response.getString("authToken"));
                             VolleyLog.v("Response:%n %s", response.toString(4));
+                            session.createLoginSession(response.getString("email"), response.getString("authToken"));
+                            callback.invokeCallback(response);
                         } catch (JSONException e) {
                             Log.i("HTTP EXCEPTION", e.getMessage());
                             e.printStackTrace();
+                            callback.onFail();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -130,13 +145,14 @@ public class KetchupAPI extends Application {
             public void onErrorResponse(VolleyError error) {
                 Log.i("HTTP ERROR", error.getMessage());
                 VolleyLog.e("Error: ", error.getMessage());
+                callback.onFail();
             }
         });
 
         KetchupAPI.getInstance().addToRequestQueue(req);
     }
 
-    public static void signupUser(String email, String password) {
+    public static void signupUser(String email, String password, final HTTPCallback callback) {
         HashMap<String, String> params = new HashMap<>();
         params.put("email", email);
         params.put("password", password);
@@ -149,9 +165,12 @@ public class KetchupAPI extends Application {
                         try {
                             Log.i("HTTP SUCCESS", response.toString());
                             VolleyLog.v("Response:%n %s", response.toString(4));
+                            session.createLoginSession(response.getString("email"), response.getString("authToken"));
+                            callback.invokeCallback(response);
                         } catch (JSONException e) {
                             Log.i("HTTP EXCEPTION", e.getMessage());
                             e.printStackTrace();
+                            callback.onFail();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -160,15 +179,26 @@ public class KetchupAPI extends Application {
             public void onErrorResponse(VolleyError error) {
                 Log.i("HTTP ERROR", error.getMessage());
                 VolleyLog.e("Error: ", error.getMessage());
+                callback.onFail();
             }
         });
 
         KetchupAPI.getInstance().addToRequestQueue(req);
     }
 
-    public static void logoutUser(String email, String password) {
+    public static boolean checkLogin() {
+        Log.i("SESSION", "checking login");
+        return session.checkLogin();
+    }
 
-        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/signup", new JSONObject(),
+    public static HashMap<String, String> getUserDetails() {
+        return session.getUserDetails();
+    }
+
+    public static void logoutUser() {
+        HashMap<String, String> params = new HashMap<>();
+
+        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/logout", new JSONObject(params),
                 new Response.Listener<JSONObject>() {
 
                     @Override
@@ -176,6 +206,7 @@ public class KetchupAPI extends Application {
                         try {
                             Log.i("HTTP SUCCESS", response.toString());
                             VolleyLog.v("Response:%n %s", response.toString(4));
+                            session.logoutUser();
                         } catch (JSONException e) {
                             Log.i("HTTP EXCEPTION", e.getMessage());
                             e.printStackTrace();

@@ -1,5 +1,7 @@
 package org.eecs499.russtrup.ketchup;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
@@ -72,9 +74,9 @@ public class LoginActivity
 
     }
 
-    public void logInUser(String email, String password) {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    public static void redirectHome(Context c) {
+        Intent i = new Intent(c, MainActivity.class);
+        c.startActivity(i);
+        ((Activity) c).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

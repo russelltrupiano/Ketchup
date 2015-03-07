@@ -1,5 +1,6 @@
 package org.eecs499.russtrup.ketchup;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -62,6 +63,18 @@ public abstract class BaseActivity extends ActionBarActivity
 
         ContentFragment contentFragment = getContentFragment(position);
 
+        if (contentFragment == null) {
+            // user is not logged in redirect him to Login Activity
+            Intent i = new Intent(this, LoginActivity.class);
+            // Closing all the Activities
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            // Add new Flag to start new Activity
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // Staring Login Activity
+            this.startActivity(i);
+            return;
+        }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, contentFragment);
@@ -76,9 +89,9 @@ public abstract class BaseActivity extends ActionBarActivity
     private void initView() {
 
         String[] nav_items = getResources().getStringArray(R.array.nav_items);
-        int nav_icons[] = {R.drawable.ic_action_computer,R.drawable.ic_action_computer,R.drawable.ic_action_settings};
+        int nav_icons[] = {R.drawable.ic_action_computer,R.drawable.ic_action_computer,R.drawable.ic_action_settings,R.drawable.ic_action_remove};
         String NAME = "Russell Trupiano";
-        String EMAIL = "russelltrupiano@gmail.com";
+        String EMAIL = KetchupAPI.getUserDetails().get("email");
         int PIC = R.drawable.ic_launcher;
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -120,6 +133,8 @@ public abstract class BaseActivity extends ActionBarActivity
                 return new FindShowsFragment();
             case 2:
                 return new SettingsFragment();
+            case 3:
+                KetchupAPI.logoutUser();
             default:
                 return null;
         }
