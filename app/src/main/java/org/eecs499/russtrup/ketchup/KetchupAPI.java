@@ -4,6 +4,7 @@ import android.app.Application;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -36,11 +37,11 @@ public class KetchupAPI extends Application {
 
     private static SessionManager session;
 
-    public static String baseUrl = "http://77669c30.ngrok.com/api/v1";
+    public static String baseUrl = "http://713fe7e1.ngrok.com/api/v1";
 //    public static String baseUrl = "http://www.ketchuptv.me/api/v1";
 
     public interface HTTPCallback {
-        void invokeCallback(JSONObject response);
+        void invokeCallback(JSONObject response) throws JSONException;
         void onFail();
     }
 
@@ -216,6 +217,39 @@ public class KetchupAPI extends Application {
                 VolleyLog.e("Error: ", error.getMessage());
             }
         });
+
+        KetchupAPI.getInstance().addToRequestQueue(req);
+    }
+
+    public static void searchShows(String query, final HTTPCallback callback ) {
+
+        Log.i("HTTP REQ", KetchupAPI.baseUrl + "/search?query=" + query);
+
+        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/search?query=" + query, null,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i("HTTP SUCCESS", response.toString());
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                            callback.invokeCallback(response);
+                        } catch (JSONException e) {
+                            Log.i("HTTP EXCEPTION", e.getMessage());
+                            e.printStackTrace();
+                            callback.onFail();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                callback.onFail();
+            }
+        });
+
+        req.setRetryPolicy(new DefaultRetryPolicy(45000, 2, 1.0f));
 
         KetchupAPI.getInstance().addToRequestQueue(req);
     }

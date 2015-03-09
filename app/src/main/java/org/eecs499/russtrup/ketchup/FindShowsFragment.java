@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -67,6 +72,18 @@ public class FindShowsFragment extends ContentFragment {
         // Inflate the layout for this fragment
 
         View fragmentView = inflater.inflate(R.layout.fragment_find_shows, container, false);
+
+        final EditText searchQuery = (EditText) fragmentView.findViewById(R.id.search_searchbar);
+
+        Button searchBtn = (Button) fragmentView.findViewById(R.id.findShows_btn);
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.redirectSearch(v.getContext(), searchQuery.getText().toString());
+//                KetchupAPI.searchShows(searchQuery.getText().toString(), new SearchCallback(v));
+            }
+        });
+
         return fragmentView;
     }
 
