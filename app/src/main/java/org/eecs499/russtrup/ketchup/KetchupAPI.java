@@ -37,7 +37,7 @@ public class KetchupAPI extends Application {
 
     private static SessionManager session;
 
-    public static String baseUrl = "http://713fe7e1.ngrok.com/api/v1";
+    public static String baseUrl = "http://ketchup-api.ngrok.com/api/v1";
 //    public static String baseUrl = "http://www.ketchuptv.me/api/v1";
 
     public interface HTTPCallback {

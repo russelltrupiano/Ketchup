@@ -1,5 +1,8 @@
 package org.eecs499.russtrup.ketchup;
 
+import android.net.Uri;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,13 +14,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.util.UriUtils;
 
 import java.io.UnsupportedEncodingException;
 
-public class SearchActivity extends ActionBarActivity {
+public class SearchActivity extends ActionBarActivity implements SearchResultFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,11 @@ public class SearchActivity extends ActionBarActivity {
         KetchupAPI.searchShows(query, new SearchCallback(findViewById(R.id.search_content)));
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
     public class SearchCallback implements KetchupAPI.HTTPCallback {
 
         View redirectView;
@@ -85,9 +94,39 @@ public class SearchActivity extends ActionBarActivity {
         }
 
         @Override
-        public void invokeCallback(JSONObject response) throws JSONException {
-            TextView searchResults = (TextView) findViewById(R.id.searchResults);
-            searchResults.setText(response.toString());
+        public void invokeCallback(JSONObject response) {
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            try {
+                JSONArray results = response.getJSONArray("shows");
+
+                for (int i = 0; i < results.length(); i++) {
+
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                    SearchResultFragment result = new SearchResultFragment();
+                    JSONObject resultJson = (JSONObject)results.get(i);
+                    String resultName = (String) resultJson.getJSONArray("name").get(0);
+                    String resultImage = "";
+                    String resultTime = (String) resultJson.getJSONArray("airtime").get(0);
+                    String resultNetwork = resultJson.getString("network");
+
+
+                    fragmentTransaction.add(R.id.searchResultsList, result);
+                    fragmentTransaction.commit();
+                    result.fillData(resultName, resultImage, resultTime, resultNetwork);
+                }
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                onFail();
+                return;
+            }
+
+
 //            MainActivity.sendSearch(redirectView.getContext(), response);
         }
 
