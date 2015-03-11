@@ -25,6 +25,7 @@ public class SessionManager {
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_TOKEN = "authToken";
+    private static final String COOKIE = "sessionCookie";
 
     public SessionManager(Context context) {
         this._context = context;
@@ -103,5 +104,14 @@ public class SessionManager {
 
         // Staring Login Activity
         _context.startActivity(i);
+    }
+
+    public void setCookie(String cookie) {
+        editor.putString(COOKIE, cookie);
+        editor.commit();
+    }
+
+    public String getCookie() {
+        return prefs.getString(COOKIE, null);
     }
 }

@@ -18,7 +18,8 @@ import org.springframework.web.util.UriUtils;
 import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends BaseActivity
-    implements ContentFragment.OnFragmentInteractionListener {
+    implements  ContentFragment.OnFragmentInteractionListener,
+                MyShowsListitemFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

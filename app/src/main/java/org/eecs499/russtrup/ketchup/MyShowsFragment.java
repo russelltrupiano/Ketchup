@@ -4,9 +4,16 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -17,7 +24,7 @@ import android.view.ViewGroup;
  * Use the {@link MyShowsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyShowsFragment extends ContentFragment {
+public class MyShowsFragment extends ContentFragment implements MyShowsListitemFragment.OnFragmentInteractionListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -61,10 +68,66 @@ public class MyShowsFragment extends ContentFragment {
     }
 
     @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    public class MyShowsCallback implements KetchupAPI.HTTPCallback {
+
+        View redirectView;
+
+        public MyShowsCallback(View v) {
+            redirectView = v;
+        }
+
+        @Override
+        public void invokeCallback(JSONObject response) {
+            FragmentManager fragmentManager =  getFragmentManager();
+
+            try {
+                JSONArray results = response.getJSONArray("shows");
+
+                for (int i = 0; i < results.length(); i++) {
+
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                    MyShowsListitemFragment result = new MyShowsListitemFragment();
+                    JSONObject resultJson = (JSONObject)results.get(i);
+                    String resultName = resultJson.getString("title");
+                    String resultImage = resultJson.getString("imageUrl");
+                    String resultTime = resultJson.getString("airtime");
+
+                    Log.i("MY SHOW", resultName);
+//                    String resultNetwork = resultJson.getString("network");
+
+
+                    fragmentTransaction.add(R.id.myShowsList, result);
+                    fragmentTransaction.commit();
+                    result.fillData(resultName, resultImage, resultTime, "");
+                }
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                onFail();
+                return;
+            }
+        }
+
+        @Override
+        public void onFail() {
+            Log.i("CALLBACK", "My Shows Failed");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_shows, container, false);
+        View theView = inflater.inflate(R.layout.fragment_my_shows, container, false);
+        KetchupAPI.getMyShows(new MyShowsCallback(theView));
+        return theView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

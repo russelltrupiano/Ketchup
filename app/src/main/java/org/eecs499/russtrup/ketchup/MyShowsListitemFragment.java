@@ -4,28 +4,24 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.squareup.picasso.Picasso;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SearchResultFragment.OnFragmentInteractionListener} interface
+ * {@link MyShowsListitemFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SearchResultFragment#newInstance} factory method to
+ * Use the {@link MyShowsListitemFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchResultFragment extends Fragment {
+public class MyShowsListitemFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,12 +31,11 @@ public class SearchResultFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private String _id;
-    private String _name;
-    private String _time;
-    private String _network;
-
     private OnFragmentInteractionListener mListener;
+
+    private String _name;
+    private String _imageUrl;
+    private String _time;
 
     /**
      * Use this factory method to create a new instance of
@@ -48,11 +43,11 @@ public class SearchResultFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchResultFragment.
+     * @return A new instance of fragment MyShowsListitemFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SearchResultFragment newInstance(String param1, String param2) {
-        SearchResultFragment fragment = new SearchResultFragment();
+    public static MyShowsListitemFragment newInstance(String param1, String param2) {
+        MyShowsListitemFragment fragment = new MyShowsListitemFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,7 +55,7 @@ public class SearchResultFragment extends Fragment {
         return fragment;
     }
 
-    public SearchResultFragment() {
+    public MyShowsListitemFragment() {
         // Required empty public constructor
     }
 
@@ -77,39 +72,16 @@ public class SearchResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.fragment_search_result, container, false);
+        View theView = inflater.inflate(R.layout.fragment_my_shows_listitem, container, false);
 
         ((TextView) theView.findViewById(R.id.showTitle)).setText(_name);
         ((TextView) theView.findViewById(R.id.showTime)).setText(_time);
-        ((TextView) theView.findViewById(R.id.showNetwork)).setText(_network);
 
-        theView.findViewById(R.id.showThumbnail).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            KetchupAPI.subscribeToShow(_id, new SubscribeCallback(v));
-            }
-        });
+        ImageView thumbnail = (ImageView) theView.findViewById(R.id.showThumbnail);
+
+        Picasso.with(getActivity().getApplicationContext()).load(_imageUrl).into(thumbnail);
 
         return theView;
-    }
-
-    public class SubscribeCallback implements KetchupAPI.HTTPCallback {
-
-        View redirectView;
-
-        public SubscribeCallback(View v) {
-            redirectView = v;
-        }
-
-        @Override
-        public void invokeCallback(JSONObject response) {
-            Log.i("CALLBACK", "Subscribe Succeeded: " + response.toString());
-        }
-
-        @Override
-        public void onFail() {
-            Log.i("CALLBACK", "Subscribe Failed");
-        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -136,6 +108,11 @@ public class SearchResultFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // nada
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -151,11 +128,10 @@ public class SearchResultFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void fillData(String id, String name, String imageUrl, String time, String network) {
-        _id = id;
+    public void fillData(String name, String imageUrl, String time, String network) {
         _name = name;
         _time = time;
-        _network = network;
+        _imageUrl = imageUrl;
     }
 
 }

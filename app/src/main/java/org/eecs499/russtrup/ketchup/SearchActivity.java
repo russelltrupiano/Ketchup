@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -107,6 +106,7 @@ public class SearchActivity extends ActionBarActivity implements SearchResultFra
 
                     SearchResultFragment result = new SearchResultFragment();
                     JSONObject resultJson = (JSONObject)results.get(i);
+                    String resultId = (String) resultJson.getJSONArray("showid").get(0);
                     String resultName = (String) resultJson.getJSONArray("name").get(0);
                     String resultImage = "";
                     String resultTime = (String) resultJson.getJSONArray("airtime").get(0);
@@ -115,7 +115,7 @@ public class SearchActivity extends ActionBarActivity implements SearchResultFra
 
                     fragmentTransaction.add(R.id.searchResultsList, result);
                     fragmentTransaction.commit();
-                    result.fillData(resultName, resultImage, resultTime, resultNetwork);
+                    result.fillData(resultId, resultName, resultImage, resultTime, resultNetwork);
                 }
 
 
@@ -125,9 +125,6 @@ public class SearchActivity extends ActionBarActivity implements SearchResultFra
                 onFail();
                 return;
             }
-
-
-//            MainActivity.sendSearch(redirectView.getContext(), response);
         }
 
         @Override

@@ -5,14 +5,19 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpClientStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.CookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie2;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,6 +42,11 @@ public class KetchupAPI extends Application {
 
     private static SessionManager session;
 
+    // http client instance
+    private static DefaultHttpClient mHttpClient;
+
+    private static String sessionCookie;
+
     public static String baseUrl = "http://ketchup-api.ngrok.com/api/v1";
 //    public static String baseUrl = "http://www.ketchuptv.me/api/v1";
 
@@ -53,6 +63,7 @@ public class KetchupAPI extends Application {
         sInstance = this;
 
         session = new SessionManager(getApplicationContext());
+
     }
 
     /**
@@ -66,11 +77,16 @@ public class KetchupAPI extends Application {
      * @return The Volley Request queue, the queue will be created if it is null
      */
     public RequestQueue getRequestQueue() {
+        // Create an instance of the Http client.
+        // We need this in order to access the cookie store
+        mHttpClient = new DefaultHttpClient();
         // lazy initialize the request queue, the queue instance will be
         // created when it is accessed for the first time
         if (mRequestQueue == null) {
-            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext(), new HttpClientStack(mHttpClient));
         }
+
+        resetCookie();
 
         return mRequestQueue;
     }
@@ -115,18 +131,61 @@ public class KetchupAPI extends Application {
         }
     }
 
+    private static void resetCookie() {
+
+        String cookie = session.getCookie();
+
+        if (cookie != null) {
+            Log.i("COOKIE", "Got cookie: " + cookie);
+            sessionCookie = cookie;
+            CookieStore cs = mHttpClient.getCookieStore();
+            cs.addCookie(new BasicClientCookie2("session", sessionCookie));
+        } else {
+            Log.i("COOKIE", "no cookie found :(");
+        }
+    }
+
+    private static void setCookie(String cookie) {
+        if (cookie != null && cookie.startsWith("session=")) {
+            cookie = cookie.substring(8);
+            Log.i("COOKIE IN HEADER", cookie);
+            sessionCookie = cookie;
+            CookieStore cs = mHttpClient.getCookieStore();
+            cs.addCookie(new BasicClientCookie2("session", sessionCookie));
+            session.setCookie(sessionCookie);
+            Log.i("COOKIE", "Set cookie: " + sessionCookie);
+        }
+    }
+
+    private static class JsonObjectRequestHeaders extends JsonObjectRequest {
+
+        public JsonObjectRequestHeaders(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+            super(method, url, jsonRequest, listener, errorListener);
+        }
+
+        public JsonObjectRequestHeaders(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+            super(url, jsonRequest, listener, errorListener);
+        }
+
+        @Override
+        protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+            setCookie(response.headers.get("Set-Cookie"));
+            return super.parseNetworkResponse(response);
+        }
+    }
+
     public static void loginUser(String email, String password, final HTTPCallback callback ) {
         HashMap<String, String> params = new HashMap<>();
         params.put("email", email);
         params.put("password", password);
 
-        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/login", new JSONObject(params),
+        JsonObjectRequestHeaders req = new JsonObjectRequestHeaders(KetchupAPI.baseUrl + "/login", new JSONObject(params),
                 new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.i("HTTP SUCCESS", response.getString("authToken"));
+                            Log.i("HTTP LOGIN SUCCESS", response.getString("authToken"));
                             VolleyLog.v("Response:%n %s", response.toString(4));
                             session.createLoginSession(response.getString("email"), response.getString("authToken"));
                             callback.invokeCallback(response);
@@ -154,13 +213,14 @@ public class KetchupAPI extends Application {
         params.put("email", email);
         params.put("password", password);
 
-        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/signup", new JSONObject(params),
+        JsonObjectRequestHeaders req = new JsonObjectRequestHeaders(KetchupAPI.baseUrl + "/signup", new JSONObject(params),
                 new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.i("HTTP SUCCESS", response.toString());
+
+                            Log.i("HTTP SIGNUP SUCCESS", response.toString());
                             VolleyLog.v("Response:%n %s", response.toString(4));
                             session.createLoginSession(response.getString("email"), response.getString("authToken"));
                             callback.invokeCallback(response);
@@ -201,7 +261,7 @@ public class KetchupAPI extends Application {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.i("HTTP SUCCESS", response.toString());
+                            Log.i("HTTP LOGOUT SUCCESS", response.toString());
                             VolleyLog.v("Response:%n %s", response.toString(4));
                             session.logoutUser();
                         } catch (JSONException e) {
@@ -231,7 +291,7 @@ public class KetchupAPI extends Application {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.i("HTTP SUCCESS", response.toString());
+                            Log.i("HTTP SEARCH SUCCESS", response.toString());
                             VolleyLog.v("Response:%n %s", response.toString(4));
                             callback.invokeCallback(response);
                         } catch (JSONException e) {
@@ -250,6 +310,68 @@ public class KetchupAPI extends Application {
         });
 
         req.setRetryPolicy(new DefaultRetryPolicy(45000, 2, 1.0f));
+
+        KetchupAPI.getInstance().addToRequestQueue(req);
+    }
+
+    public static void getMyShows(final HTTPCallback callback) {
+        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/shows", null,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i("HTTP MY SHOWS SUCCESS", response.toString());
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                            callback.invokeCallback(response);
+                        } catch (JSONException e) {
+                            Log.i("HTTP EXCEPTION", e.getMessage());
+                            e.printStackTrace();
+                            callback.onFail();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                callback.onFail();
+            }
+        });
+
+        KetchupAPI.getInstance().addToRequestQueue(req);
+    }
+
+    public static void subscribeToShow(String showid, final HTTPCallback callback) {
+
+        Log.i("SUBSCRIBING", "Trying to subscribe to show with id " + showid);
+
+        HashMap<String, Integer> params = new HashMap<>();
+        params.put("show_id", Integer.parseInt(showid));
+
+        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/subscribe", new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i("HTTP SUB SUCCESS", response.toString());
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                            callback.invokeCallback(response);
+                        } catch (JSONException e) {
+                            Log.i("HTTP EXCEPTION", e.getMessage());
+                            e.printStackTrace();
+                            callback.onFail();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                callback.onFail();
+            }
+        });
 
         KetchupAPI.getInstance().addToRequestQueue(req);
     }
