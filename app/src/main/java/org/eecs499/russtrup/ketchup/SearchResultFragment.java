@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,16 +78,18 @@ public class SearchResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.fragment_search_result, container, false);
+        final View theView = inflater.inflate(R.layout.fragment_search_result, container, false);
 
         ((TextView) theView.findViewById(R.id.showTitle)).setText(_name);
         ((TextView) theView.findViewById(R.id.showTime)).setText(_time);
         ((TextView) theView.findViewById(R.id.showNetwork)).setText(_network);
 
-        theView.findViewById(R.id.showThumbnail).setOnClickListener(new View.OnClickListener() {
+        theView.findViewById(R.id.addShowBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             KetchupAPI.subscribeToShow(_id, new SubscribeCallback(v));
+            theView.findViewById(R.id.addShowBtn).setVisibility(View.INVISIBLE);
+            theView.findViewById(R.id.removeShowBtn).setVisibility(View.VISIBLE);
             }
         });
 

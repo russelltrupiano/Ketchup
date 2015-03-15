@@ -79,7 +79,9 @@ public class MyShowsListitemFragment extends Fragment {
 
         ImageView thumbnail = (ImageView) theView.findViewById(R.id.showThumbnail);
 
-        Picasso.with(getActivity().getApplicationContext()).load(_imageUrl).into(thumbnail);
+        if (_imageUrl != null && !_imageUrl.equals("")) {
+            Picasso.with(getActivity().getApplicationContext()).load(_imageUrl).into(thumbnail);
+        }
 
         return theView;
     }
