@@ -1,18 +1,17 @@
 package org.eecs499.russtrup.ketchup;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.support.v7.widget.SearchView;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.web.util.UriUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -37,7 +36,16 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
+        searchView.setQueryHint("Search...");
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
@@ -59,30 +67,6 @@ public class MainActivity extends BaseActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
-    }
-
-    public static void sendSearch(Context c, JSONObject response) {
-        Intent i = new Intent(c, SearchActivity.class);
-        jsonToContextVars(c, response);
-        c.startActivity(i);
-        ((Activity) c).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
-
-    public static void jsonToContextVars(Context c, JSONObject response) {
-        JSONArray showArray = null;
-        try {
-            showArray = response.getJSONArray("shows");
-
-            for (int i = 0; i < showArray.length(); i++) {
-                JSONObject jsonobject = showArray.getJSONObject(i);
-                String name = jsonobject.getString("name");
-                String airday = jsonobject.getString("airday");
-                Log.i("ARRAY PARSER", name + " " + airday);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
     }
 
     public static void redirectSearch(Context c, String query) {

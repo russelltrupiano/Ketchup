@@ -89,7 +89,7 @@ public abstract class BaseActivity extends ActionBarActivity
     private void initView() {
 
         String[] nav_items = getResources().getStringArray(R.array.nav_items);
-        int nav_icons[] = {R.drawable.ic_action_computer,R.drawable.ic_action_computer,R.drawable.ic_action_settings,R.drawable.ic_action_remove};
+        int nav_icons[] = {R.drawable.ic_action_computer,R.drawable.ic_action_search,R.drawable.ic_action_settings,R.drawable.ic_action_remove};
         String NAME = "Russell Trupiano";
         String EMAIL = KetchupAPI.getUserDetails().get("email");
         int PIC = R.drawable.ic_launcher;

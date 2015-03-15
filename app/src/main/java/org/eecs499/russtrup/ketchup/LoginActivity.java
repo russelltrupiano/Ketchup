@@ -76,6 +76,11 @@ public class LoginActivity
 
     public static void redirectHome(Context c) {
         Intent i = new Intent(c, MainActivity.class);
+        // Closing all the Activities
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // Add new Flag to start new Activity
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         c.startActivity(i);
         ((Activity) c).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }

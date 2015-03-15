@@ -80,7 +80,6 @@ public class FindShowsFragment extends ContentFragment {
             @Override
             public void onClick(View v) {
                 MainActivity.redirectSearch(v.getContext(), searchQuery.getText().toString());
-//                KetchupAPI.searchShows(searchQuery.getText().toString(), new SearchCallback(v));
             }
         });
 

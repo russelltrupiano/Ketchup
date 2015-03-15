@@ -1,8 +1,11 @@
 package org.eecs499.russtrup.ketchup;
 
+import android.app.SearchManager;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +28,9 @@ public class SearchActivity extends ActionBarActivity implements SearchResultFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String query = handleIntent(getIntent());
+
         setContentView(R.layout.activity_search);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -32,15 +38,20 @@ public class SearchActivity extends ActionBarActivity implements SearchResultFra
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Search");
+
             toolbar.bringToFront();
         }
-
-        Bundle bundle = getIntent().getExtras();
-        String query = bundle.getString("QUERY");
 
         if (query != null) {
             runQuery(query);
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
     }
 
 
@@ -56,14 +67,15 @@ public class SearchActivity extends ActionBarActivity implements SearchResultFra
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(item.getItemId()) {
+            case(android.R.id.home):
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case(R.id.action_settings):
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void runQuery(String query) {
@@ -131,5 +143,22 @@ public class SearchActivity extends ActionBarActivity implements SearchResultFra
         public void onFail() {
             Log.i("CALLBACK", "Search Failed");
         }
+    }
+
+    private String handleIntent(Intent intent) {
+        String query;
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            try {
+                query = UriUtils.encodeQuery(intent.getStringExtra(SearchManager.QUERY), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            query = intent.getExtras().getString("QUERY");
+        }
+
+        return query;
     }
 }

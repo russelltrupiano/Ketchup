@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="appRed">#ef4545</color>
-    <color name="appRedDark">#ce202c</color>
+    <color name="appRed">#ffcd202b</color>
+    <color name="appRedDark">#ff730c12</color>
     <color name="appText">#ffffff</color>
-    <color name="appAccent">#ffcc66</color>
+    <color name="appAccent">#fffece6d</color>
+    <color name="appAccentDark">#ffffb95f</color>
+    <color name="ripple">#ffffdc99</color>
     <color name="gradient_start">#838383</color>
     <color name="navItemBackground">#333333</color>
 </resources>

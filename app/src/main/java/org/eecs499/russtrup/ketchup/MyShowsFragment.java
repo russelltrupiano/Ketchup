@@ -10,6 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
+
+import com.melnykov.fab.FloatingActionButton;
+import com.melnykov.fab.ObservableScrollView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -127,6 +131,9 @@ public class MyShowsFragment extends ContentFragment implements MyShowsListitemF
         // Inflate the layout for this fragment
         View theView = inflater.inflate(R.layout.fragment_my_shows, container, false);
         KetchupAPI.getMyShows(new MyShowsCallback(theView));
+        FloatingActionButton fab = (FloatingActionButton) theView.findViewById(R.id.fab);
+        ObservableScrollView scrollView = (ObservableScrollView) theView.findViewById(R.id.myShowsScrollView);
+        fab.attachToScrollView(scrollView);
         return theView;
     }
 

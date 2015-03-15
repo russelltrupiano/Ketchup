@@ -20,7 +20,19 @@
             android:hint="Search..."
             android:textColor="#565656"
             android:textColorHint="#787878"
-            android:paddingBottom="5dp" />
+            android:paddingBottom="5dp">
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:id="@+id/findShows_btn"
+            android:layout_alignBottom="@+id/search_searchbar"
+            android:layout_toEndOf="@+id/search_searchbar"
+            android:background="@color/appAccent"/>
 
         <TextView
             android:id="@+id/airingToday_subtitle"
@@ -30,7 +42,6 @@
             android:layout_below="@+id/search_searchbar"
             android:layout_marginTop="20dp"
             android:text="Airing Today"
-            android:textColor="#565656"
             android:textIsSelectable="false"
             android:textSize="25sp" />
 
@@ -85,7 +96,6 @@
             android:layout_below="@+id/horizontalScrollView"
             android:layout_marginTop="20dp"
             android:text="Most Popular"
-            android:textColor="#565656"
             android:textSize="25sp" />
 
         <HorizontalScrollView
@@ -128,14 +138,6 @@
             </LinearLayout>
 
         </HorizontalScrollView>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Search"
-            android:id="@+id/findShows_btn"
-            android:layout_alignBottom="@+id/search_searchbar"
-            android:layout_toEndOf="@+id/search_searchbar" />
 
     </RelativeLayout>
 
