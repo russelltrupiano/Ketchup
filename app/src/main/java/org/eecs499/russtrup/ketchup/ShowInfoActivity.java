@@ -19,8 +19,8 @@ import it.neokree.materialtabs.MaterialTabListener;
 
 public class ShowInfoActivity extends ActionBarActivity implements
         MaterialTabListener,
-        FailedSearchFragment.OnFragmentInteractionListener,
-        SignupFragment.OnFragmentInteractionListener{
+        ShowInfoUnwatchedFragment.OnFragmentInteractionListener,
+        ShowInfoManageFragment.OnFragmentInteractionListener {
 
     private Toolbar toolbar;
     private MaterialTabHost tabHost;
@@ -76,8 +76,8 @@ public class ShowInfoActivity extends ActionBarActivity implements
         }
         public Fragment getItem(int num) {
             switch(num) {
-                case 0: return new SignupFragment();
-                case 1: return new FailedSearchFragment();
+                case 0: return new ShowInfoUnwatchedFragment();
+                case 1: return new ShowInfoManageFragment();
                 default: return null;
             }
         }

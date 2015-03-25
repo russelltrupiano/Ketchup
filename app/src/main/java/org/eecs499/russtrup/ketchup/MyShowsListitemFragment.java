@@ -1,22 +1,32 @@
 package org.eecs499.russtrup.ketchup;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.format.Time;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
-import java.text.FieldPosition;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -31,6 +41,8 @@ public class MyShowsListitemFragment extends Fragment {
     private String _airday;
     private String _network;
 
+    Context _context;
+
     public MyShowsListitemFragment() {
         // Required empty public constructor
     }
@@ -44,7 +56,9 @@ public class MyShowsListitemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View theView = inflater.inflate(R.layout.fragment_my_shows_listitem, container, false);
+        final View theView = inflater.inflate(R.layout.fragment_my_shows_listitem, container, false);
+
+        _context = getActivity().getApplicationContext();
 
         ((TextView) theView.findViewById(R.id.showTitle)).setText(_name);
         ((TextView) theView.findViewById(R.id.showTime)).setText(_airday + " @ " + _time);
@@ -53,7 +67,7 @@ public class MyShowsListitemFragment extends Fragment {
         ImageView thumbnail = (ImageView) theView.findViewById(R.id.showThumbnail);
 
         if (_imageUrl != null && !_imageUrl.equals("")) {
-            Picasso.with(getActivity().getApplicationContext()).load(_imageUrl).into(thumbnail);
+            Picasso.with(_context).load(_imageUrl).into(thumbnail);
         }
 
         thumbnail.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +77,50 @@ public class MyShowsListitemFragment extends Fragment {
             }
         });
 
+        final ImageButton optionsExpander = (ImageButton) theView.findViewById(R.id.item_options);
+        optionsExpander.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(_context, (FrameLayout)theView.findViewById(R.id.unsubscribe_menu_wrapper));
+                popupMenu.getMenuInflater().inflate(R.menu.menu_myshows_unsubscribe, popupMenu.getMenu());
+
+
+                //registering popup with OnMenuItemClickListener
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.menu_unsubscribe) {
+                            Log.i("UNSUB", "Unsubbing from id " + _id + " - " + _name);
+                            KetchupAPI.unsubscribeToShow(_id, new UnsubscribeCallback(theView));
+                            return true;
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+
         return theView;
+    }
+
+    public class UnsubscribeCallback implements KetchupAPI.HTTPCallback {
+
+        View redirectView;
+
+        public UnsubscribeCallback(View v) {
+            redirectView = v;
+        }
+
+        @Override
+        public void invokeCallback(JSONObject response) {
+//            MyShowsFragment.removeShow
+        }
+
+        @Override
+        public void onFail() {
+            Log.i("CALLBACK", "Unsubscribe Failed");
+        }
     }
 
     @Override

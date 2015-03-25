@@ -375,4 +375,36 @@ public class KetchupAPI extends Application {
 
         KetchupAPI.getInstance().addToRequestQueue(req);
     }
+
+    public static void unsubscribeToShow(String showid, final HTTPCallback callback) {
+
+        HashMap<String, Integer> params = new HashMap<>();
+        params.put("show_id", Integer.parseInt(showid));
+
+        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/unsubscribe", new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i("HTTP SUB SUCCESS", response.toString());
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                            callback.invokeCallback(response);
+                        } catch (JSONException e) {
+                            Log.i("HTTP EXCEPTION", e.getMessage());
+                            e.printStackTrace();
+                            callback.onFail();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                callback.onFail();
+            }
+        });
+
+        KetchupAPI.getInstance().addToRequestQueue(req);
+    }
 }

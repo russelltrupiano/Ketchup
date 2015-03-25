@@ -25,6 +25,7 @@ android:background="@drawable/myshow_list_item_ripple">
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/showThumbnail"
         android:text="Better Call Saul"
+        android:inputType="textNoSuggestions"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -51,12 +52,21 @@ android:background="@drawable/myshow_list_item_ripple">
         android:layout_width="25dp"
         android:layout_height="30dp"
         android:background="@drawable/myshow_list_item_ripple"
-        android:id="@+id/item_settings"
+        android:id="@+id/item_options"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginBottom="11dp"
+        android:layout_marginRight="6dp"
         android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
         android:padding="5dp" />
+
+    <FrameLayout
+        android:id="@+id/unsubscribe_menu_wrapper"
+        android:orientation="horizontal"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="12dp"
+        android:layout_above="@+id/item_options"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

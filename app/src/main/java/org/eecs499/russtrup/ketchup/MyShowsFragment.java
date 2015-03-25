@@ -1,7 +1,6 @@
 package org.eecs499.russtrup.ketchup;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,9 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.melnykov.fab.ObservableScrollView;
@@ -21,10 +17,8 @@ import com.melnykov.fab.ObservableScrollView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.web.util.UriUtils;
 
-import java.io.UnsupportedEncodingException;
-
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +32,9 @@ public class MyShowsFragment extends ContentFragment
         implements MyShowsListitemFragment.OnFragmentInteractionListener{
 
     private OnFragmentInteractionListener mListener;
+
+    private int numShows;
+    private ArrayList<Fragment> myShows;
 
     /**
      * Use this factory method to create a new instance of
@@ -62,6 +59,8 @@ public class MyShowsFragment extends ContentFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        numShows = 0;
+        myShows = new ArrayList<>();
     }
 
     @Override
@@ -89,6 +88,9 @@ public class MyShowsFragment extends ContentFragment
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                     MyShowsListitemFragment result = new MyShowsListitemFragment();
+
+                    myShows.add(result);
+
                     JSONObject resultJson = (JSONObject)results.get(i);
                     String resultId = resultJson.getString("id");
                     String resultName = resultJson.getString("title");
@@ -96,13 +98,15 @@ public class MyShowsFragment extends ContentFragment
                     String resultTime = resultJson.getString("airtime");
                     String resultDay = resultJson.getString("airday");
 
-                    Log.i("MY SHOW", resultName);
+                    Log.i("MY SHOW", resultName + " - " + resultId);
                     String resultNetwork = resultJson.getString("network");
 
 
                     fragmentTransaction.add(R.id.myShowsList, result);
                     fragmentTransaction.commit();
                     result.fillData(resultId, resultName, resultImage, resultTime, resultDay, resultNetwork);
+
+                    numShows++;
                 }
 
             } catch (JSONException e) {
@@ -123,6 +127,7 @@ public class MyShowsFragment extends ContentFragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View theView = inflater.inflate(R.layout.fragment_my_shows, container, false);
+
         KetchupAPI.getMyShows(new MyShowsCallback(theView));
 
         FloatingActionButton fab = (FloatingActionButton) theView.findViewById(R.id.fab);
@@ -170,4 +175,12 @@ public class MyShowsFragment extends ContentFragment
         public void onFragmentInteraction(Uri uri);
     }
 
+    public void removeShow(Fragment fragment) {
+        FragmentManager fragmentManager =  getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.remove(fragment);
+        numShows--;
+    }
+
 }
+
