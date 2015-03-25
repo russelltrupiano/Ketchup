@@ -47,8 +47,8 @@ public class KetchupAPI extends Application {
 
     private static String sessionCookie;
 
-    public static String baseUrl = "http://ketchup-api.ngrok.com/api/v1";
-//    public static String baseUrl = "http://www.ketchuptv.me/api/v1";
+
+    public static String baseUrl;
 
     public interface HTTPCallback {
         void invokeCallback(JSONObject response) throws JSONException;
@@ -64,6 +64,11 @@ public class KetchupAPI extends Application {
 
         session = new SessionManager(getApplicationContext());
 
+        if (Config.MODE_ACTIVE.equals(Config.MODE_DEBUG)) {
+            baseUrl = "http://ketchup-api.ngrok.com/api/v1";
+        } else {
+            baseUrl = "http://www.ketchuptv.me/api/v1";
+        }
     }
 
     /**

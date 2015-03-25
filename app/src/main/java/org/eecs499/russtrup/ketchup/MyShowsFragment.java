@@ -35,6 +35,7 @@ public class MyShowsFragment extends ContentFragment
 
     private int numShows;
     private ArrayList<Fragment> myShows;
+    private MyShowsFragment instance;
 
     /**
      * Use this factory method to create a new instance of
@@ -61,6 +62,7 @@ public class MyShowsFragment extends ContentFragment
         super.onCreate(savedInstanceState);
         numShows = 0;
         myShows = new ArrayList<>();
+        instance = this;
     }
 
     @Override
@@ -79,12 +81,20 @@ public class MyShowsFragment extends ContentFragment
         @Override
         public void invokeCallback(JSONObject response) {
             FragmentManager fragmentManager =  getFragmentManager();
+            JSONArray results;
 
             try {
-                JSONArray results = response.getJSONArray("shows");
+                results = response.getJSONArray("shows");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            }
 
-                for (int i = 0; i < results.length(); i++) {
+            Log.i("MYSHOWS", "Showing " + results.length() + " shows.");
 
+            for (int i = 0; i < results.length(); i++) {
+
+                try {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                     MyShowsListitemFragment result = new MyShowsListitemFragment();
@@ -96,7 +106,7 @@ public class MyShowsFragment extends ContentFragment
                     String resultName = resultJson.getString("title");
                     String resultImage = resultJson.getString("imageUrl");
                     String resultTime = resultJson.getString("airtime");
-                    String resultDay = resultJson.getString("airday");
+                    String resultDay = resultJson.optString("airday", "???");
 
                     Log.i("MY SHOW", resultName + " - " + resultId);
                     String resultNetwork = resultJson.getString("network");
@@ -105,14 +115,12 @@ public class MyShowsFragment extends ContentFragment
                     fragmentTransaction.add(R.id.myShowsList, result);
                     fragmentTransaction.commit();
                     result.fillData(resultId, resultName, resultImage, resultTime, resultDay, resultNetwork);
+                    result.setParent(instance);
 
                     numShows++;
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                onFail();
-                return;
             }
         }
 
@@ -179,6 +187,7 @@ public class MyShowsFragment extends ContentFragment
         FragmentManager fragmentManager =  getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.remove(fragment);
+        fragmentTransaction.commit();
         numShows--;
     }
 

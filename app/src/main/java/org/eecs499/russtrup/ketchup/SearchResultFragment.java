@@ -112,11 +112,24 @@ public class SearchResultFragment extends Fragment {
 
         @Override
         public void invokeCallback(JSONObject response) {
+            try {
+                String title = response.getJSONArray("title").getString(0);
+                Log.i("SUBTITLE", "Adding show " + title);
+                if (title.isEmpty()) {
+                    Toast.makeText(getActivity().getApplicationContext(), "You're already subscribed to " + _name + "!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Successfully subscribed to " + title + "!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("SUB_ERR", e.getMessage());
+            }
             Log.i("CALLBACK", "Subscribe Succeeded: " + response.toString());
         }
 
         @Override
         public void onFail() {
+
             Log.i("CALLBACK", "Subscribe Failed");
         }
     }

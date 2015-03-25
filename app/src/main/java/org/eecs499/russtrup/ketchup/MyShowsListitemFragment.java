@@ -41,7 +41,10 @@ public class MyShowsListitemFragment extends Fragment {
     private String _airday;
     private String _network;
 
+    private MyShowsFragment _parent;
+
     Context _context;
+    MyShowsListitemFragment _instance;
 
     public MyShowsListitemFragment() {
         // Required empty public constructor
@@ -101,7 +104,13 @@ public class MyShowsListitemFragment extends Fragment {
             }
         });
 
+        _instance = this;
+
         return theView;
+    }
+
+    public void setParent(MyShowsFragment parent) {
+        _parent = parent;
     }
 
     public class UnsubscribeCallback implements KetchupAPI.HTTPCallback {
@@ -114,7 +123,7 @@ public class MyShowsListitemFragment extends Fragment {
 
         @Override
         public void invokeCallback(JSONObject response) {
-//            MyShowsFragment.removeShow
+            _parent.removeShow(_instance);
         }
 
         @Override
