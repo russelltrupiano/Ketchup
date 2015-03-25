@@ -16,16 +16,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends BaseActivity
@@ -40,9 +37,8 @@ public class MainActivity extends BaseActivity
 
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "0.0.1";
+    private static final String PROPERTY_APP_VERSION = "0.0.2";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    String SENDER_ID = "108703506776";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +74,7 @@ public class MainActivity extends BaseActivity
                 if (gcm == null) {
                     gcm = GoogleCloudMessaging.getInstance(context);
                 }
-                regid = gcm.register(SENDER_ID);
+                regid = gcm.register(Config.GCM_SENDER_ID);
                 msg = "Device registered, registration ID=" + regid;
 
                 // You should send the registration ID to your server over HTTP,
@@ -86,6 +82,7 @@ public class MainActivity extends BaseActivity
                 // The request to your server should be authenticated if your app
                 // is using accounts.
 //                    sendRegistrationIdToBackend();
+                Log.i("REGID", regid);
 
                 // For this demo: we don't need to send it because the device
                 // will send upstream messages to a server that echo back the
@@ -100,6 +97,13 @@ public class MainActivity extends BaseActivity
                 // exponential back-off.
             }
             return msg;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (KetchupAPI.checkLogin()) {
+                loadCurrentFragment();
+            }
         }
     }
 
@@ -130,7 +134,8 @@ public class MainActivity extends BaseActivity
             Log.i("GCM", "App version changed.");
             return "";
         }
-        return registrationId;
+        return "";
+//        return registrationId;
     }
 
     private int getAppVersion(Context context) {
@@ -207,44 +212,15 @@ public class MainActivity extends BaseActivity
 
     }
 
-    public static void redirectSearch(Context c, String query) {
+    public static void loadSearch(Context c) {
         Intent i = new Intent(c, SearchActivity.class);
-        try {
-            i.putExtra("QUERY", UriUtils.encodeQuery(query, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
-            return;
-        }
         c.startActivity(i);
         ((Activity) c).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    /*private class Register extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... args) {
-            try {
-                if (gcm == null) {
-                    gcm = GoogleCloudMessaging.getInstance(context);
-                    regid = gcm.register(SENDER_ID);
-                    Log.i("RegId", regid);
-                }
-
-                return  regid;
-
-            } catch (IOException ex) {
-                Log.e("Error", ex.getMessage());
-                return "Fails";
-
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            if (KetchupAPI.checkLogin()) {
-                loadCurrentFragment();
-            }
-        }
-    }*/
+    public static void loadShowInfo(Context c) {
+        Intent i = new Intent(c, ShowInfoActivity.class);
+        c.startActivity(i);
+        ((Activity) c).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
 }

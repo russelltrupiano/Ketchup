@@ -1,0 +1,9 @@
+<it.neokree.materialtabs.MaterialTabHost
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/materialTabHost"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    app:textColor="#FFFFFF"
+    app:primaryColor="#ffcd202b"
+    app:accentColor="#fffece6d" />

@@ -21,60 +21,27 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/appAccent"
             android:textSize="50sp" />
-
-        <LinearLayout
-            android:id="@+id/login_buttons_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <Button
-                android:id="@+id/signup_button"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:layout_weight=".495"
-                android:background="@drawable/loginbutton_ripple"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center_vertical|center_horizontal"
-                android:onClick="loadSignupFragment"
-                android:text="@string/sign_up"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <View
-                android:layout_width="4dp"
-                android:layout_height="50dp"
-                android:layout_weight=".01"
-                android:background="#adadad" />
-
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:layout_weight=".495"
-                android:background="@drawable/loginbutton_ripple"
-                android:clickable="true"
-                android:gravity="center_vertical|center_horizontal"
-                android:onClick="loadLoginFragment"
-                android:text="@string/log_in"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/login_linear_layout"
-        android:background="@color/appRed"
-        android:orientation="vertical">
+        android:id="@+id/secondaryToolbarWrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_below="@+id/login_linear_layout">
 
-        <!--FRAGMENT WILL GO HERE-->
+        <!-- Secondary application toolbar-->
+        <include
+            android:id="@+id/materialTabHost"
+            layout="@layout/showinfo_secondary_toolbar" />
 
     </LinearLayout>
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/appRed"
+        android:layout_below="@id/secondaryToolbarWrapper" />
 
 </RelativeLayout>

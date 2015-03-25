@@ -20,6 +20,7 @@ import android.view.View;
 // for a material theme in KitKat applications
 public abstract class BaseActivity extends ActionBarActivity
         implements  MyShowsFragment.OnFragmentInteractionListener,
+                    MyShowsListitemFragment.OnFragmentInteractionListener,
                     FindShowsFragment.OnFragmentInteractionListener,
                     SettingsFragment.OnFragmentInteractionListener {
 
@@ -85,7 +86,6 @@ public abstract class BaseActivity extends ActionBarActivity
         loadFragment(currentSelectedPosition);
     }
 
-
     private void initView() {
 
         String[] nav_items = getResources().getStringArray(R.array.nav_items);
@@ -107,17 +107,6 @@ public abstract class BaseActivity extends ActionBarActivity
         mRecyclerView.setLayoutManager(llm);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-
-
-//        leftDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                loadFragment(position);
-//
-//
-//            }
-//        });
     }
 
     public void closeDrawer() {

@@ -1,6 +1,7 @@
 package org.eecs499.russtrup.ketchup;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.melnykov.fab.ObservableScrollView;
@@ -18,6 +21,9 @@ import com.melnykov.fab.ObservableScrollView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.web.util.UriUtils;
+
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -28,15 +34,8 @@ import org.json.JSONObject;
  * Use the {@link MyShowsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyShowsFragment extends ContentFragment implements MyShowsListitemFragment.OnFragmentInteractionListener{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class MyShowsFragment extends ContentFragment
+        implements MyShowsListitemFragment.OnFragmentInteractionListener{
 
     private OnFragmentInteractionListener mListener;
 
@@ -52,8 +51,6 @@ public class MyShowsFragment extends ContentFragment implements MyShowsListitemF
     public static MyShowsFragment newInstance(String param1, String param2) {
         MyShowsFragment fragment = new MyShowsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,10 +62,6 @@ public class MyShowsFragment extends ContentFragment implements MyShowsListitemF
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -97,20 +90,20 @@ public class MyShowsFragment extends ContentFragment implements MyShowsListitemF
 
                     MyShowsListitemFragment result = new MyShowsListitemFragment();
                     JSONObject resultJson = (JSONObject)results.get(i);
+                    String resultId = resultJson.getString("id");
                     String resultName = resultJson.getString("title");
                     String resultImage = resultJson.getString("imageUrl");
                     String resultTime = resultJson.getString("airtime");
+                    String resultDay = resultJson.getString("airday");
 
                     Log.i("MY SHOW", resultName);
-//                    String resultNetwork = resultJson.getString("network");
+                    String resultNetwork = resultJson.getString("network");
 
 
                     fragmentTransaction.add(R.id.myShowsList, result);
                     fragmentTransaction.commit();
-                    result.fillData(resultName, resultImage, resultTime, "");
+                    result.fillData(resultId, resultName, resultImage, resultTime, resultDay, resultNetwork);
                 }
-
-
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -131,17 +124,19 @@ public class MyShowsFragment extends ContentFragment implements MyShowsListitemF
         // Inflate the layout for this fragment
         View theView = inflater.inflate(R.layout.fragment_my_shows, container, false);
         KetchupAPI.getMyShows(new MyShowsCallback(theView));
+
         FloatingActionButton fab = (FloatingActionButton) theView.findViewById(R.id.fab);
         ObservableScrollView scrollView = (ObservableScrollView) theView.findViewById(R.id.myShowsScrollView);
         fab.attachToScrollView(scrollView);
-        return theView;
-    }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.loadSearch(getActivity());
+            }
+        });
+
+        return theView;
     }
 
     @Override
@@ -172,7 +167,6 @@ public class MyShowsFragment extends ContentFragment implements MyShowsListitemF
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 

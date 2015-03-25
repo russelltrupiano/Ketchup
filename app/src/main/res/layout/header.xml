@@ -5,8 +5,6 @@
     android:background="@color/appAccent"
     android:orientation="vertical"
     android:weightSum="1">
-    <!--android:background="@drawable/background_poly"-->
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +28,7 @@
         <TextView
             android:id="@+id/email"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="16dp"
             android:layout_marginTop="5dp"
             android:text="russelltrupiano@gmail.com"

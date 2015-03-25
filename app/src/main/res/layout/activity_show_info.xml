@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.eecs499.russtrup.ketchup.ShowInfoActivity">
+
+    <LinearLayout
+        android:id="@+id/toolbarWrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Application toolbar-->
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/secondaryToolbarWrapper"
+        android:layout_below="@+id/toolbarWrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Secondary application toolbar-->
+        <include
+            android:id="@+id/materialTabHost"
+            layout="@layout/showinfo_secondary_toolbar" />
+
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_below="@id/secondaryToolbarWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

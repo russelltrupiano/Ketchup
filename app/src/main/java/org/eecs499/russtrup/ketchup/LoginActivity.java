@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,11 +16,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
+import it.neokree.materialtabs.MaterialTab;
+import it.neokree.materialtabs.MaterialTabHost;
+import it.neokree.materialtabs.MaterialTabListener;
+
 
 public class LoginActivity
         extends ActionBarActivity
-        implements  LoginFragment.OnFragmentInteractionListener,
+        implements  MaterialTabListener,
+                    LoginFragment.OnFragmentInteractionListener,
                     SignupFragment.OnFragmentInteractionListener {
+
+    private MaterialTabHost tabHost;
+    private ViewPager pager;
+    private ViewPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +39,30 @@ public class LoginActivity
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_login);
-        loadSignupFragment(null);
+
+
+        tabHost = (MaterialTabHost) findViewById(R.id.materialTabHost);
+        pager = (ViewPager) this.findViewById(R.id.viewpager);
+
+        // init view pager
+        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(pagerAdapter);
+        pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                // when user do a swipe the selected tab change
+                tabHost.setSelectedNavigationItem(position);
+            }
+        });
+
+        // insert all tabs from pagerAdapter data
+        for (int i = 0; i < pagerAdapter.getCount(); i++) {
+            tabHost.addTab(
+                    tabHost.newTab()
+                            .setText(pagerAdapter.getPageTitle(i))
+                            .setTabListener(this)
+            );
+        }
     }
 
     @Override
@@ -52,20 +87,45 @@ public class LoginActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void loadLoginFragment(View v) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        LoginFragment loginFragment = new LoginFragment();
-        fragmentTransaction.replace(R.id.fragment_container, loginFragment);
-        fragmentTransaction.commit();
+    @Override
+    public void onTabSelected(MaterialTab materialTab) {
+        // when the tab is clicked the pager swipe content to the tab position
+        pager.setCurrentItem(materialTab.getPosition());
     }
 
-    public void loadSignupFragment(View v) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        SignupFragment signupFragment = new SignupFragment();
-        fragmentTransaction.replace(R.id.fragment_container, signupFragment);
-        fragmentTransaction.commit();
+    @Override
+    public void onTabReselected(MaterialTab materialTab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(MaterialTab materialTab) {
+
+    }
+
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+        public Fragment getItem(int num) {
+            switch(num) {
+                case 0: return new SignupFragment();
+                case 1: return new LoginFragment();
+                default: return null;
+            }
+        }
+        @Override
+        public int getCount() {
+            return 2;
+        }
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch(position) {
+                case 0: return "Sign Up";
+                case 1: return "Log In";
+                default: return null;
+            }
+        }
     }
 
 

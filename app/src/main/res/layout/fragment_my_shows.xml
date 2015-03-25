@@ -35,12 +35,11 @@
         android:src="@drawable/ic_plus"
         fab:fab_colorNormal="@color/appAccent"
         fab:fab_colorPressed="@color/appAccentDark"
-        fab:fab_colorRipple="@color/appAccent"
+        fab:fab_colorRipple="@color/appRed"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/myShowsScrollView"
-        android:layout_marginEnd="44dp"
-        android:layout_marginBottom="38dp" />
+        android:layout_marginBottom="26dp" />
 
 </RelativeLayout>

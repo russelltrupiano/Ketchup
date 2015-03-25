@@ -11,35 +11,11 @@
         android:padding="10dp"
         tools:context="org.eecs499.russtrup.ketchup.FindShowsFragment">
 
-        <EditText
-            android:id="@+id/search_searchbar"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:textSize="25sp"
-            android:hint="Search..."
-            android:textColor="#565656"
-            android:textColorHint="#787878"
-            android:paddingBottom="5dp">
-
-            <requestFocus />
-        </EditText>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Search"
-            android:id="@+id/findShows_btn"
-            android:layout_alignBottom="@+id/search_searchbar"
-            android:layout_toEndOf="@+id/search_searchbar"
-            android:background="@color/appAccent"/>
-
         <TextView
             android:id="@+id/airingToday_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/search_searchbar"
             android:layout_marginTop="20dp"
             android:text="Airing Today"
             android:textIsSelectable="false"

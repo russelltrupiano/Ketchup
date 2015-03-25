@@ -71,19 +71,7 @@ public class FindShowsFragment extends ContentFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View fragmentView = inflater.inflate(R.layout.fragment_find_shows, container, false);
-
-        final EditText searchQuery = (EditText) fragmentView.findViewById(R.id.search_searchbar);
-
-        Button searchBtn = (Button) fragmentView.findViewById(R.id.findShows_btn);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.redirectSearch(v.getContext(), searchQuery.getText().toString());
-            }
-        });
-
-        return fragmentView;
+        return inflater.inflate(R.layout.fragment_find_shows, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

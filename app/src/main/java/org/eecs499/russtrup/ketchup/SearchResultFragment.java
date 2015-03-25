@@ -17,6 +17,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +44,7 @@ public class SearchResultFragment extends Fragment {
     private String _id;
     private String _name;
     private String _time;
+    private String _day;
     private String _network;
 
     private OnFragmentInteractionListener mListener;
@@ -81,7 +87,7 @@ public class SearchResultFragment extends Fragment {
         final View theView = inflater.inflate(R.layout.fragment_search_result, container, false);
 
         ((TextView) theView.findViewById(R.id.showTitle)).setText(_name);
-        ((TextView) theView.findViewById(R.id.showTime)).setText(_time);
+        ((TextView) theView.findViewById(R.id.showTime)).setText(_day + " @ " + _time);
         ((TextView) theView.findViewById(R.id.showNetwork)).setText(_network);
 
         theView.findViewById(R.id.addShowBtn).setOnClickListener(new View.OnClickListener() {
@@ -154,11 +160,28 @@ public class SearchResultFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void fillData(String id, String name, String imageUrl, String time, String network) {
+    public void fillData(String id, String name, String imageUrl, String time, String day, String network) {
         _id = id;
         _name = name;
-        _time = time;
+        _time = formatTime(time);
+        _day = day;
         _network = network;
+    }
+
+    private String formatTime(String time) {
+        DateFormat df = new SimpleDateFormat("HH:mm");
+        DateFormat outputDf = new SimpleDateFormat("hh:mm aa");
+
+        Date date;
+        String output = null;
+
+        try {
+            date = df.parse(time);
+            output = outputDf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return output;
     }
 
 }

@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/search_content"
     tools:context="org.eecs499.russtrup.ketchup.SearchActivity">
 
     <LinearLayout
@@ -17,34 +17,29 @@
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/search_searchbar"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:textSize="25sp"
-        android:hint="Search..."
+    <android.support.v7.widget.SearchView
+        android:id="@+id/searchBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbarWrapper"
+        android:background="#343434"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:queryHint="Search..."
+        android:showAsAction="always"
         android:textColor="#565656"
         android:textColorHint="#787878"
-        android:paddingBottom="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/toolbarWrapper"
-        android:layout_alignParentStart="true" />
+        android:textSize="25sp">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search"
-        android:id="@+id/button"
-        android:layout_alignBottom="@+id/search_searchbar"
-        android:layout_toEndOf="@+id/search_searchbar" />
+    </android.support.v7.widget.SearchView>
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scrollbars="none"
-        android:layout_below="@+id/button"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/searchBox"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/searchResultsList"
@@ -56,5 +51,14 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/loading_spinner"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="invisible"
+        android:contentDescription="loading spinner"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
