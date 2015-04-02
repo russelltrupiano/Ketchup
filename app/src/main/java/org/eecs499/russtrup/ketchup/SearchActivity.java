@@ -9,12 +9,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,14 +42,19 @@ public class SearchActivity extends ActionBarActivity
     AnimationDrawable loadingAnimation;
     ImageView loadingSpinner;
 
-    ArrayList<Fragment> searchResults;
+    ArrayList<TVShowBase> searchResults;
+    ArrayList<Fragment> resultFragments;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         String query = handleIntent(getIntent());
-
         setContentView(R.layout.activity_search);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -63,6 +67,7 @@ public class SearchActivity extends ActionBarActivity
         searchView.setIconified(false);
         numResults = 0;
         searchResults = new ArrayList<>();
+        resultFragments = new ArrayList<>();
         resultsContainer = (LinearLayout) findViewById(R.id.searchResultsList);
 
         loadingSpinner = (ImageView) findViewById(R.id.loading_spinner);
@@ -85,6 +90,7 @@ public class SearchActivity extends ActionBarActivity
                     e.printStackTrace();
                     Log.e("SearchActivity", e.getMessage());
                 }
+
                 return true;
             }
 
@@ -111,10 +117,13 @@ public class SearchActivity extends ActionBarActivity
             toolbar.bringToFront();
         }
 
-        if (query != null && !query.isEmpty()) {
-            runQuery(query);
-        } else {
-            searchView.requestFocus();
+        if (savedInstanceState == null) {
+
+            if (query != null && !query.isEmpty()) {
+                runQuery(query);
+            } else {
+                searchView.requestFocus();
+            }
         }
     }
 
@@ -125,8 +134,9 @@ public class SearchActivity extends ActionBarActivity
 
         for (int i = 0; i < numResults; i++) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.remove(searchResults.remove(0));
+            fragmentTransaction.remove(resultFragments.remove(0));
             fragmentTransaction.commit();
+            searchResults.remove(0);
         }
 
         numResults = 0;
@@ -207,57 +217,63 @@ public class SearchActivity extends ActionBarActivity
 
                     SearchResultFragment result = new SearchResultFragment();
 
-                    searchResults.add(result);
+                    resultFragments.add(result);
 
                     JSONObject resultJson = (JSONObject) results.get(i);
                     String resultId = (String) resultJson.getJSONArray("showid").get(0);
                     String resultName = (String) resultJson.getJSONArray("name").get(0);
-                    String resultImage = "";
                     String resultTime = (String) resultJson.getJSONArray("airtime").get(0);
                     String resultDay = (String) resultJson.getJSONArray("airday").get(0);
                     String resultNetwork = resultJson.getString("network");
 
+                    TVShowBase show = new TVShowBase(resultId, resultName, resultNetwork, resultDay, resultTime);
+                    result.set_tvshowbase(show);
+                    searchResults.add(show);
+
                     fragmentTransaction.add(R.id.searchResultsList, result);
                     fragmentTransaction.commit();
-                    result.fillData(resultId, resultName, resultImage, resultTime, resultDay, resultNetwork);
+
                     numResults++;
                 }
 
-            } catch (JSONException e) {
+            } catch (JSONException | IllegalStateException e) {
                 e.printStackTrace();
-                return;
             }
         }
 
         @Override
         public void onFail() {
 
-            loadingSpinner.setVisibility(View.INVISIBLE);
-            loadingAnimation.stop();
+            try {
+                loadingSpinner.setVisibility(View.INVISIBLE);
+                loadingAnimation.stop();
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            FailedSearchFragment failedSearchFragment = new FailedSearchFragment();
+                FailedSearchFragment failedSearchFragment = new FailedSearchFragment();
 
-            searchResults.add(failedSearchFragment);
-            numResults = 1;
+                resultFragments.add(failedSearchFragment);
+                numResults = 1;
 
-            fragmentTransaction.add(R.id.searchResultsList, failedSearchFragment);
-            fragmentTransaction.commit();
+                fragmentTransaction.add(R.id.searchResultsList, failedSearchFragment);
+                fragmentTransaction.commit();
 
-            // Force transaction to assign retry to button
-            fragmentManager.executePendingTransactions();
+                // Force transaction to assign retry to button
+                fragmentManager.executePendingTransactions();
 
-            Button retryBtn = failedSearchFragment.getRetryButton();
+                Button retryBtn = failedSearchFragment.getRetryButton();
 
-            retryBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clearResults();
-                    KetchupAPI.searchShows(lastQuery, new SearchCallback(findViewById(R.id.search_content)));
-                }
-            });
+                retryBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clearResults();
+                        KetchupAPI.searchShows(lastQuery, new SearchCallback(findViewById(R.id.search_content)));
+                    }
+                });
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -280,5 +296,14 @@ public class SearchActivity extends ActionBarActivity
         }
 
         return query;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

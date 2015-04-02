@@ -5,11 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,34 +14,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class MyShowsListitemFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-
-    private String _id;
-    private String _name;
-    private String _imageUrl;
-    private String _time;
-    private String _airday;
-    private String _network;
-
+    private TVShow _tvshow;
     private MyShowsFragment _parent;
-
-    Context _context;
-    MyShowsListitemFragment _instance;
+    private Context _context;
+    private MyShowsListitemFragment _instance;
+    private OnFragmentInteractionListener mListener;
 
     public MyShowsListitemFragment() {
         // Required empty public constructor
@@ -61,22 +44,31 @@ public class MyShowsListitemFragment extends Fragment {
         // Inflate the layout for this fragment
         final View theView = inflater.inflate(R.layout.fragment_my_shows_listitem, container, false);
 
+        if (_tvshow == null) {return theView;}
+
         _context = getActivity().getApplicationContext();
 
-        ((TextView) theView.findViewById(R.id.showTitle)).setText(_name);
-        ((TextView) theView.findViewById(R.id.showTime)).setText(_airday + " @ " + _time);
-        ((TextView) theView.findViewById(R.id.showNetwork)).setText(_network);
+        ((TextView) theView.findViewById(R.id.showTitle)).setText(_tvshow.get_title());
+        ((TextView) theView.findViewById(R.id.showTime)).setText(_tvshow.get_airday() + " @ " + _tvshow.get_airtime());
+        ((TextView) theView.findViewById(R.id.showNetwork)).setText(_tvshow.get_network());
 
         ImageView thumbnail = (ImageView) theView.findViewById(R.id.showThumbnail);
 
-        if (_imageUrl != null && !_imageUrl.equals("")) {
-            Picasso.with(_context).load(_imageUrl).into(thumbnail);
+        if (_tvshow.get_imageUrl() != null && !_tvshow.get_imageUrl().equals("")) {
+            Picasso.with(_context).load(_tvshow.get_imageUrl()).into(thumbnail);
         }
 
-        thumbnail.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout itemLayout = (RelativeLayout)theView.findViewById(R.id.itemLayout);
+        itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.loadShowInfo(getActivity());
+                MainActivity.loadShowInfo(getActivity(), _tvshow);
+            }
+        });
+        theView.findViewById(R.id.showTitle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.loadShowInfo(getActivity(), _tvshow);
             }
         });
 
@@ -93,8 +85,8 @@ public class MyShowsListitemFragment extends Fragment {
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
                         if (id == R.id.menu_unsubscribe) {
-                            Log.i("UNSUB", "Unsubbing from id " + _id + " - " + _name);
-                            KetchupAPI.unsubscribeToShow(_id, new UnsubscribeCallback(theView));
+                            Log.i("UNSUB", "Unsubbing from id " + _tvshow.get_id() + " - " + _tvshow.get_title());
+                            KetchupAPI.unsubscribeToShow(_tvshow.get_id(), new UnsubscribeCallback(theView));
                             return true;
                         }
                         return true;
@@ -168,29 +160,8 @@ public class MyShowsListitemFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void fillData(String id, String name, String imageUrl, String time, String day, String network) {
-        _id = id;
-        _name = name;
-        _time = formatTime(time);
-        _airday = day;
-        _network = network;
-        _imageUrl = imageUrl;
-    }
-
-    private String formatTime(String time) {
-        DateFormat df = new SimpleDateFormat("HH:mm");
-        DateFormat outputDf = new SimpleDateFormat("hh:mm aa");
-
-        Date date;
-        String output = null;
-
-        try {
-            date = df.parse(time);
-            output = outputDf.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return output;
+    public void set_tvshow(TVShow tvshow) {
+        _tvshow = tvshow;
     }
 
 }

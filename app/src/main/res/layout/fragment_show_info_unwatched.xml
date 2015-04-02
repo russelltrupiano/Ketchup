@@ -3,11 +3,6 @@
     android:layout_height="match_parent"
     tools:context="org.eecs499.russtrup.ketchup.ShowInfoManageFragment">
 
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="UNWATCHED EPISODES"
-        android:layout_gravity="center"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="30sp" />
+    <include layout="@layout/fragment_show_info_header"/>
 
 </RelativeLayout>

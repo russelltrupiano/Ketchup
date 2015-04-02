@@ -1,13 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context="org.eecs499.russtrup.ketchup.ShowInfoManageFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.eecs499.russtrup.ketchup.ShowInfoManageFragment">
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:text="MANAGE SHOW"
-    android:layout_gravity="center"
-    android:layout_centerVertical="true"
-    android:layout_centerHorizontal="true"
-    android:textSize="30sp" />
+    <include layout="@layout/fragment_show_info_header"/>
 
 </RelativeLayout>

@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 /**
@@ -18,32 +20,19 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ShowInfoManageFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private TVShow _tvshow;
     private OnFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ShowInfoManageFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ShowInfoManageFragment newInstance(String param1, String param2) {
+    public static ShowInfoManageFragment newInstance(TVShow show) {
         ShowInfoManageFragment fragment = new ShowInfoManageFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        fragment.set_tvshow(show);
         return fragment;
     }
 
@@ -51,27 +40,33 @@ public class ShowInfoManageFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private void set_tvshow(TVShow tvshow) {
+        _tvshow = tvshow;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_show_info_manage, container, false);
-    }
+        View theView = inflater.inflate(R.layout.fragment_show_info_manage, container, false);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        ImageView showInfoHeaderImage = (ImageView) theView.findViewById(R.id.showInfoHeaderImage);
+        TextView showInfoHeaderTitle = (TextView) theView.findViewById(R.id.showInfoShowName);
+        TextView showInfoHeaderNetwork = (TextView) theView.findViewById(R.id.showInfoNetwork);
+        TextView showInfoHeaderAirtime = (TextView) theView.findViewById(R.id.showInfoAirTime);
+
+        // TODO: Get landscape image for this view
+//        showInfoHeaderImage = ????
+        showInfoHeaderTitle.setText(_tvshow.get_title());
+        showInfoHeaderNetwork.setText(_tvshow.get_network());
+        showInfoHeaderAirtime.setText(_tvshow.get_airday() + " @ " + _tvshow.get_airtime());
+
+        return theView;
     }
 
     @Override
@@ -102,7 +97,6 @@ public class ShowInfoManageFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 

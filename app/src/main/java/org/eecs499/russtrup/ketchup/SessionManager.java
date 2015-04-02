@@ -40,9 +40,11 @@ public class SessionManager {
 
         // Storing auth token in pref
         editor.putString(KEY_TOKEN, authToken);
+        User.get_instance().set_id(authToken);
 
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
+        User.get_instance().set_email(email);
 
         // commit changes
         editor.commit();

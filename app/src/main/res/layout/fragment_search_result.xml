@@ -3,8 +3,8 @@
     android:id="@+id/searchResultItem"
     android:layout_width="fill_parent"
     android:layout_height="80dp"
-    android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
     android:background="#454545">
 
     <TextView
@@ -15,8 +15,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/showThumbnail"
-        android:text="Better Call Saul"
         android:inputType="textNoSuggestions"
+        android:text="Better Call Saul"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -48,7 +48,8 @@
         android:background="#00676767"
         android:contentDescription="Add Show"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_plus" />
+        android:src="@drawable/ic_plus"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/removeShowBtn"

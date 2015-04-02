@@ -19,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,19 +36,16 @@ public class MyShowsFragment extends ContentFragment
     private OnFragmentInteractionListener mListener;
 
     private int numShows;
-    private ArrayList<Fragment> myShows;
+    private Collection<TVShow> myShows;
     private MyShowsFragment instance;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment MyShowsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static MyShowsFragment newInstance(String param1, String param2) {
+    public static MyShowsFragment newInstance() {
         MyShowsFragment fragment = new MyShowsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -99,8 +98,6 @@ public class MyShowsFragment extends ContentFragment
 
                     MyShowsListitemFragment result = new MyShowsListitemFragment();
 
-                    myShows.add(result);
-
                     JSONObject resultJson = (JSONObject)results.get(i);
                     String resultId = resultJson.getString("id");
                     String resultName = resultJson.getString("title");
@@ -111,17 +108,23 @@ public class MyShowsFragment extends ContentFragment
                     Log.i("MY SHOW", resultName + " - " + resultId);
                     String resultNetwork = resultJson.getString("network");
 
+                    TVShow show = new TVShow(resultId, resultName, resultNetwork, resultDay, resultTime, resultImage);
+                    result.set_tvshow(show);
+                    myShows.add(show);
 
                     fragmentTransaction.add(R.id.myShowsList, result);
                     fragmentTransaction.commit();
-                    result.fillData(resultId, resultName, resultImage, resultTime, resultDay, resultNetwork);
+
                     result.setParent(instance);
 
                     numShows++;
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+
+            User.get_instance().updateSubscriptions(myShows);
         }
 
         @Override

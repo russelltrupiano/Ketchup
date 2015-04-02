@@ -1,5 +1,6 @@
 package org.eecs499.russtrup.ketchup;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,11 +27,16 @@ public class ShowInfoActivity extends ActionBarActivity implements
     private MaterialTabHost tabHost;
     private ViewPager pager;
     private ViewPagerAdapter pagerAdapter;
+    private TVShow _tvshow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_info);
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        _tvshow = (TVShow)extras.get("tvshow");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -55,7 +61,7 @@ public class ShowInfoActivity extends ActionBarActivity implements
             }
         });
 
-//        // insert all tabs from pagerAdapter data
+        // insert all tabs from pagerAdapter data
         for (int i = 0; i < pagerAdapter.getCount(); i++) {
             tabHost.addTab(
                     tabHost.newTab()
@@ -76,8 +82,8 @@ public class ShowInfoActivity extends ActionBarActivity implements
         }
         public Fragment getItem(int num) {
             switch(num) {
-                case 0: return new ShowInfoUnwatchedFragment();
-                case 1: return new ShowInfoManageFragment();
+                case 0: return ShowInfoUnwatchedFragment.newInstance(_tvshow);
+                case 1: return ShowInfoManageFragment.newInstance(_tvshow);
                 default: return null;
             }
         }

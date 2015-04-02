@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,37 +29,21 @@ import java.util.Date;
  * create an instance of this fragment.
  */
 public class SearchResultFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private String _id;
-    private String _name;
-    private String _time;
-    private String _day;
-    private String _network;
+    private String TAG = SearchResultFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
+    private TVShowBase _tvshowbase;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment SearchResultFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static SearchResultFragment newInstance(String param1, String param2) {
+    public static SearchResultFragment newInstance() {
         SearchResultFragment fragment = new SearchResultFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,10 +55,6 @@ public class SearchResultFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -86,16 +63,33 @@ public class SearchResultFragment extends Fragment {
         // Inflate the layout for this fragment
         final View theView = inflater.inflate(R.layout.fragment_search_result, container, false);
 
-        ((TextView) theView.findViewById(R.id.showTitle)).setText(_name);
-        ((TextView) theView.findViewById(R.id.showTime)).setText(_day + " @ " + _time);
-        ((TextView) theView.findViewById(R.id.showNetwork)).setText(_network);
+        ((TextView) theView.findViewById(R.id.showTitle)).setText(_tvshowbase.get_title());
+        ((TextView) theView.findViewById(R.id.showTime)).setText(_tvshowbase.get_airday() + " @ " + _tvshowbase.get_airtime());
+        ((TextView) theView.findViewById(R.id.showNetwork)).setText(_tvshowbase.get_network());
+
+        if (User.get_instance().subscribedTo(_tvshowbase)) {
+            Log.i(TAG, "Subscribed to " + _tvshowbase.get_title());
+            theView.findViewById(R.id.removeShowBtn).setVisibility(View.VISIBLE);
+        } else {
+            Log.i(TAG, "Not subscribed to " + _tvshowbase.get_title());
+            theView.findViewById(R.id.addShowBtn).setVisibility(View.VISIBLE);
+        }
 
         theView.findViewById(R.id.addShowBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            KetchupAPI.subscribeToShow(_id, new SubscribeCallback(v));
-            theView.findViewById(R.id.addShowBtn).setVisibility(View.INVISIBLE);
-            theView.findViewById(R.id.removeShowBtn).setVisibility(View.VISIBLE);
+                KetchupAPI.subscribeToShow(_tvshowbase.get_id(), new SubscribeCallback(v));
+                theView.findViewById(R.id.addShowBtn).setVisibility(View.INVISIBLE);
+                theView.findViewById(R.id.removeShowBtn).setVisibility(View.VISIBLE);
+            }
+        });
+
+        theView.findViewById(R.id.removeShowBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KetchupAPI.unsubscribeToShow(_tvshowbase.get_id(), new UnsubscribeCallback(v));
+                theView.findViewById(R.id.removeShowBtn).setVisibility(View.INVISIBLE);
+                theView.findViewById(R.id.addShowBtn).setVisibility(View.VISIBLE);
             }
         });
 
@@ -116,7 +110,7 @@ public class SearchResultFragment extends Fragment {
                 String title = response.getJSONArray("title").getString(0);
                 Log.i("SUBTITLE", "Adding show " + title);
                 if (title.isEmpty()) {
-                    Toast.makeText(getActivity().getApplicationContext(), "You're already subscribed to " + _name + "!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "You're already subscribed to " + _tvshowbase.get_title() + "!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Successfully subscribed to " + title + "!", Toast.LENGTH_SHORT).show();
                 }
@@ -134,10 +128,29 @@ public class SearchResultFragment extends Fragment {
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    public class UnsubscribeCallback implements KetchupAPI.HTTPCallback {
+
+        View redirectView;
+
+        public UnsubscribeCallback(View v) {
+            redirectView = v;
+        }
+
+        @Override
+        public void invokeCallback(JSONObject response) {
+            try {
+                String title = response.getJSONArray("title").getString(0);
+                Toast.makeText(getActivity().getApplicationContext(), "Unsubscribed from " + title, Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("UNSUB_ERR", e.getMessage());
+            }
+            Log.i("CALLBACK", "Unsubscribe Succeeded: " + response.toString());
+        }
+
+        @Override
+        public void onFail() {
+            Log.i("CALLBACK", "Unsubscribe Failed");
         }
     }
 
@@ -169,32 +182,11 @@ public class SearchResultFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void fillData(String id, String name, String imageUrl, String time, String day, String network) {
-        _id = id;
-        _name = name;
-        _time = formatTime(time);
-        _day = day;
-        _network = network;
-    }
-
-    private String formatTime(String time) {
-        DateFormat df = new SimpleDateFormat("HH:mm");
-        DateFormat outputDf = new SimpleDateFormat("hh:mm aa");
-
-        Date date;
-        String output = null;
-
-        try {
-            date = df.parse(time);
-            output = outputDf.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return output;
+    public void set_tvshowbase(TVShowBase tvshowbase) {
+        _tvshowbase = tvshowbase;
     }
 
 }

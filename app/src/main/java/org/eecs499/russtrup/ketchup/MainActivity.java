@@ -218,8 +218,9 @@ public class MainActivity extends BaseActivity
         ((Activity) c).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    public static void loadShowInfo(Context c) {
+    public static void loadShowInfo(Context c, TVShow tvshow) {
         Intent i = new Intent(c, ShowInfoActivity.class);
+        i.putExtra("tvshow", tvshow);
         c.startActivity(i);
         ((Activity) c).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
