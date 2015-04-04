@@ -44,7 +44,8 @@ public class ShowInfoActivity extends ActionBarActivity implements
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toolbar.bringToFront();
-            toolbar.setTitle("Insert Show Title Here");
+            toolbar.setTitle(_tvshow.get_title());
+            getSupportActionBar().setTitle(_tvshow.get_title());
         }
 
         tabHost = (MaterialTabHost) findViewById(R.id.materialTabHost);

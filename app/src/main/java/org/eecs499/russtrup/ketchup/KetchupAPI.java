@@ -47,7 +47,6 @@ public class KetchupAPI extends Application {
 
     private static String sessionCookie;
 
-
     public static String baseUrl;
 
     public interface HTTPCallback {
@@ -395,5 +394,9 @@ public class KetchupAPI extends Application {
         });
 
         KetchupAPI.getInstance().addToRequestQueue(req);
+    }
+
+    public static void updateEpisode(String showId, int seasonNumber, int episodeNumber, boolean watched) {
+        Log.i("UPDATING", "Marking " + seasonNumber + "x" + episodeNumber + " - " + showId + " to " + (watched ? "watched" : "unwatched"));
     }
 }

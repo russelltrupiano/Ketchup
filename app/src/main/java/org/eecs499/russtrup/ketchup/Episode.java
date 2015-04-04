@@ -1,5 +1,6 @@
 package org.eecs499.russtrup.ketchup;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Date;
@@ -8,23 +9,22 @@ public class Episode implements Comparable{
 
     private String TAG = Episode.class.getSimpleName();
 
-    String _id;
     String _title;
     int _season;
     int _episodeNumber;
     Date _airdate;
+    Boolean _watched;
 
-    public Episode(String id, String title, int season, int episodeNumber, Date airdate) {
-        _id = id;
+    public Episode(String title, int season, int episodeNumber, Date airdate) {
+        this(title, season, episodeNumber, airdate, false);
+    }
+
+    public Episode(String title, int season, int episodeNumber, Date airdate, Boolean watched) {
         _title = title;
         _season = season;
         _episodeNumber = episodeNumber;
         _airdate = airdate;
-    }
-
-
-    public String get_id() {
-        return _id;
+        _watched = watched;
     }
 
     public String get_title() {
@@ -43,9 +43,12 @@ public class Episode implements Comparable{
         return _airdate;
     }
 
+    public Boolean get_watched() {
+        return _watched;
+    }
 
     @Override
-    public int compareTo(Object another) {
+    public int compareTo(@NonNull Object another) {
         if (another.getClass() == Episode.class) {
             return compareTo((Episode)another);
         } else {

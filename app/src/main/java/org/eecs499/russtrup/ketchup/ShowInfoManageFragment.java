@@ -19,7 +19,7 @@ import android.widget.TextView;
  * Use the {@link ShowInfoManageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShowInfoManageFragment extends Fragment {
+public class ShowInfoManageFragment extends ShowInfoFragment {
 
     private TVShow _tvshow;
     private OnFragmentInteractionListener mListener;

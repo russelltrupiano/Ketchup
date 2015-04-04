@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +21,12 @@ import android.widget.TextView;
  * Use the {@link ShowInfoUnwatchedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShowInfoUnwatchedFragment extends Fragment {
+public class ShowInfoUnwatchedFragment extends ShowInfoFragment {
 
     private TVShow _tvshow;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -66,6 +71,14 @@ public class ShowInfoUnwatchedFragment extends Fragment {
         showInfoHeaderNetwork.setText(_tvshow.get_network());
         showInfoHeaderAirtime.setText(_tvshow.get_airday() + " @ " + _tvshow.get_airtime());
 
+        mRecyclerView = (RecyclerView) theView.findViewById(R.id.episode_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mAdapter = new EpisodeListAdapter(_tvshow.get_id(), _tvshow.get_unwatched_episodes(), getActivity().getApplicationContext());
+        mRecyclerView.setAdapter(mAdapter);
 
         return theView;
     }

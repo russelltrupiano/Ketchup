@@ -1,8 +1,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.eecs499.russtrup.ketchup.ShowInfoManageFragment">
 
-    <include layout="@layout/fragment_show_info_header"/>
+
+    <LinearLayout
+        android:id="@+id/show_info_header_wrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/fragment_show_info_header" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/episode_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/show_info_header_wrapper"
+        android:scrollbars="vertical" />
 
 </RelativeLayout>
