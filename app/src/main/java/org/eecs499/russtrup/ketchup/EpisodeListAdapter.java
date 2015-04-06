@@ -3,6 +3,7 @@ package org.eecs499.russtrup.ketchup;
 import android.app.Fragment;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,46 +33,8 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
             mEpisodeTitle = (TextView) episodeView.findViewById(R.id.show_info_episode_name);
             mAirdateTime = (TextView) episodeView.findViewById(R.id.show_info_episode_airdatetime);
             mUpdateButton = (ImageButton) episodeView.findViewById(R.id.show_info_update_button);
-
-            mUpdateButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    KetchupAPI.updateEpisode(
-                            mShowId, mEpisode.get_season(), mEpisode.get_episodeNumber(),
-                            !mEpisode.get_watched(), new UpdateEpisodeCallback(episodeView));
-                }
-            });
-        }
-
-        class UpdateEpisodeCallback implements KetchupAPI.HTTPCallback {
-
-            View _itemView;
-
-            public UpdateEpisodeCallback(View itemView) {
-                _itemView = itemView;
-            }
-
-            public void setButtonSource() {
-                if (!mEpisode.get_watched()) {
-                    mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_accept));
-                } else {
-                    mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_remove));
-                }
-            }
-
-            @Override
-            public void invokeCallback(JSONObject response) throws JSONException {
-                setButtonSource();
-            }
-
-            @Override
-            public void onFail() {
-                setButtonSource();
-            }
         }
     }
-
-
 
     public EpisodeListAdapter(String showId, Episode[] episodes, Context context) {
         mShowId = showId;
@@ -91,7 +54,7 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(EpisodeListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final EpisodeListAdapter.ViewHolder holder, int position) {
         // - replace the contents of the view with that element
         holder.mEpisodeTitle.setText(mEpisodes[position].get_title());
         holder.mAirdateTime.setText(mEpisodes[position].get_airdate().toString());
@@ -101,7 +64,47 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
         } else {
             holder.mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_remove));
         }
+
+        class UpdateEpisodeCallback implements KetchupAPI.HTTPCallback {
+
+            View _itemView;
+
+            public UpdateEpisodeCallback(View itemView) {
+                _itemView = itemView;
+            }
+
+            public void setButtonSource() {
+                if (!holder.mEpisode.get_watched()) {
+                    holder.mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_accept));
+                } else {
+                    holder.mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_remove));
+                }
+            }
+
+            @Override
+            public void invokeCallback(JSONObject response) throws JSONException {
+                setButtonSource();
+            }
+
+            @Override
+            public void onFail() {
+                setButtonSource();
+            }
+        }
+
+        holder.mUpdateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("SUB", holder.mEpisode.get_title() + " is " + holder.mEpisode.get_watched());
+                KetchupAPI.updateEpisode(
+                        mShowId, holder.mEpisode.get_season(), holder.mEpisode.get_episodeNumber(),
+                        !holder.mEpisode.get_watched(), new UpdateEpisodeCallback(v));
+                holder.mEpisode.set_watched(!holder.mEpisode.get_watched());
+            }
+        });
     }
+
+
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

@@ -67,4 +67,8 @@ public class Episode implements Serializable, Comparable{
             return get_episodeNumber() - another.get_episodeNumber();
         }
     }
+
+    public void set_watched(boolean _watched) {
+        this._watched = _watched;
+    }
 }
