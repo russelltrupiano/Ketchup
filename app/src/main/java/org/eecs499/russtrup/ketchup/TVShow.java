@@ -7,12 +7,14 @@ import java.util.Date;
 public class TVShow extends TVShowBase {
 
     String _imageUrl;
+    String _headerUrl;
 
     ArrayList<Episode> _episodes;
 
-    public TVShow(String id, String title, String network, String airday, String airtime, String imageUrl) {
+    public TVShow(String id, String title, String network, String airday, String airtime, String imageUrl, String headerUrl) {
         super(id, title, network, airday, airtime);
         _imageUrl = imageUrl;
+        _headerUrl = headerUrl;
         _episodes = new ArrayList<>();
     }
 
@@ -26,6 +28,9 @@ public class TVShow extends TVShowBase {
 
     public String get_imageUrl() {
         return _imageUrl;
+    }
+    public String get_headerUrl() {
+        return _headerUrl;
     }
 
     public ArrayList<Episode> get_episodes() {

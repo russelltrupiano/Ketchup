@@ -103,13 +103,14 @@ public class MyShowsFragment extends ContentFragment
                     String resultId = resultJson.getString("id");
                     String resultName = resultJson.getString("title");
                     String resultImage = resultJson.getString("imageUrl");
+                    String resultHeader = resultJson.getString("headerUrl");
                     String resultTime = resultJson.getString("airtime");
                     String resultDay = resultJson.optString("airday", "???");
                     String resultNetwork = resultJson.optString("network", "???");
 
                     ArrayList<Episode> episodes = buildEpisodeArrayFromJson(resultJson.getJSONArray("episodes"));
 
-                    TVShow show = new TVShow(resultId, resultName, resultNetwork, resultDay, resultTime, resultImage);
+                    TVShow show = new TVShow(resultId, resultName, resultNetwork, resultDay, resultTime, resultImage, resultHeader);
                     show.importEpisodes(episodes);
                     result.set_tvshow(show);
                     myShows.add(show);

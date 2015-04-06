@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,8 +67,9 @@ public class ShowInfoUnwatchedFragment extends ShowInfoFragment {
         TextView showInfoHeaderNetwork = (TextView) theView.findViewById(R.id.showInfoNetwork);
         TextView showInfoHeaderAirtime = (TextView) theView.findViewById(R.id.showInfoAirTime);
 
-        // TODO: Get landscape image for this view
-//        showInfoHeaderImage = ????
+        if (_tvshow.get_headerUrl() != null && !_tvshow.get_headerUrl().equals("")) {
+            Picasso.with(getActivity().getApplicationContext()).load(_tvshow.get_headerUrl()).into(showInfoHeaderImage);
+        }
         showInfoHeaderTitle.setText(_tvshow.get_title());
         showInfoHeaderNetwork.setText(_tvshow.get_network());
         showInfoHeaderAirtime.setText(_tvshow.get_airday() + " @ " + _tvshow.get_airtime());

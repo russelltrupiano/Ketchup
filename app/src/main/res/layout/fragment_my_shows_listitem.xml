@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/showThumbnail"
-        android:layout_width="80dp"
+        android:layout_width="53dp"
         android:layout_height="fill_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -18,13 +18,18 @@
 
     <TextView
         android:id="@+id/showTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/showThumbnail"
-        android:inputType="textNoSuggestions"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:text="Better Call Saul"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -62,8 +67,8 @@
 
     <ImageView
         android:id="@+id/myshow_unwatced_count_image"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="5dp"

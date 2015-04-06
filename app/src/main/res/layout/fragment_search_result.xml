@@ -9,13 +9,17 @@
 
     <TextView
         android:id="@+id/showTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/showThumbnail"
-        android:inputType="textNoSuggestions"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:text="Better Call Saul"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

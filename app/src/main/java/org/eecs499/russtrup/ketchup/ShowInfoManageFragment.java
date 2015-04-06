@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,8 +94,9 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
             }
         });
 
-        // TODO: Get landscape image for this view
-//        showInfoHeaderImage = ????
+        if (_tvshow.get_headerUrl() != null && !_tvshow.get_headerUrl().equals("")) {
+            Picasso.with(getActivity().getApplicationContext()).load(_tvshow.get_headerUrl()).into(showInfoHeaderImage);
+        }
         showInfoHeaderTitle.setText(_tvshow.get_title());
         showInfoHeaderNetwork.setText(_tvshow.get_network());
         showInfoHeaderAirtime.setText(_tvshow.get_airday() + " @ " + _tvshow.get_airtime());
