@@ -107,7 +107,7 @@ public class SearchResultFragment extends Fragment {
         @Override
         public void invokeCallback(JSONObject response) {
             try {
-                String title = response.getJSONArray("title").getString(0);
+                String title = response.getString("title");
                 Log.i("SUBTITLE", "Adding show " + title);
                 if (title.isEmpty()) {
                     Toast.makeText(getActivity().getApplicationContext(), "You're already subscribed to " + _tvshowbase.get_title() + "!", Toast.LENGTH_SHORT).show();

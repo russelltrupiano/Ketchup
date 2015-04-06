@@ -130,6 +130,9 @@ public class SearchActivity extends ActionBarActivity
     private void clearResults() {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
+        if (searchResults.size() != numResults) {
+            Log.e("FAIL", "INVALID STATE OF SIZES. " + searchResults.size() + " vs. " + numResults);
+        }
         assert (searchResults.size() == numResults);
 
         for (int i = 0; i < numResults; i++) {
@@ -264,6 +267,7 @@ public class SearchActivity extends ActionBarActivity
 
                 Button retryBtn = failedSearchFragment.getRetryButton();
 
+                // TODO: This is now broken
                 retryBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

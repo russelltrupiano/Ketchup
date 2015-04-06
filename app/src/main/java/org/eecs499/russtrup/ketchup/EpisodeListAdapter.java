@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.ViewHolder> {
 
     // Showid for API request
@@ -24,7 +27,7 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
         public ImageButton mUpdateButton;
         public Episode mEpisode;
 
-        public ViewHolder(View episodeView) {
+        public ViewHolder(final View episodeView) {
             super(episodeView);
             mEpisodeTitle = (TextView) episodeView.findViewById(R.id.show_info_episode_name);
             mAirdateTime = (TextView) episodeView.findViewById(R.id.show_info_episode_airdatetime);
@@ -33,11 +36,34 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
             mUpdateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    KetchupAPI.updateEpisode(mShowId, mEpisode.get_season(), mEpisode.get_episodeNumber(), !mEpisode.get_watched());
+                    KetchupAPI.updateEpisode(
+                            mShowId, mEpisode.get_season(), mEpisode.get_episodeNumber(),
+                            !mEpisode.get_watched(), new UpdateEpisodeCallback(episodeView));
                 }
             });
         }
+
+        class UpdateEpisodeCallback implements KetchupAPI.HTTPCallback {
+
+            View _itemView;
+
+            public UpdateEpisodeCallback(View itemView) {
+                _itemView = itemView;
+            }
+
+            @Override
+            public void invokeCallback(JSONObject response) throws JSONException {
+
+            }
+
+            @Override
+            public void onFail() {
+
+            }
+        }
     }
+
+
 
     public EpisodeListAdapter(String showId, Episode[] episodes, Context context) {
         mShowId = showId;

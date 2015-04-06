@@ -18,9 +18,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,8 +92,6 @@ public class MyShowsFragment extends ContentFragment
                 return;
             }
 
-            Log.i("MYSHOWS", "Showing " + results.length() + " shows.");
-
             for (int i = 0; i < results.length(); i++) {
 
                 try {
@@ -104,11 +105,13 @@ public class MyShowsFragment extends ContentFragment
                     String resultImage = resultJson.getString("imageUrl");
                     String resultTime = resultJson.getString("airtime");
                     String resultDay = resultJson.optString("airday", "???");
+                    String resultNetwork = resultJson.optString("network", "???");
 
-                    Log.i("MY SHOW", resultName + " - " + resultId);
-                    String resultNetwork = resultJson.getString("network");
+                    ArrayList<Episode> episodes = buildEpisodeArrayFromJson(resultJson.getJSONArray("episodes"));
+                    Log.i("MYSHOW", episodes.toString());
 
                     TVShow show = new TVShow(resultId, resultName, resultNetwork, resultDay, resultTime, resultImage);
+                    show.importEpisodes(episodes);
                     result.set_tvshow(show);
                     myShows.add(show);
 
@@ -131,6 +134,39 @@ public class MyShowsFragment extends ContentFragment
         public void onFail() {
             Log.i("CALLBACK", "My Shows Failed");
         }
+    }
+
+    private ArrayList<Episode> buildEpisodeArrayFromJson(JSONArray episodes) {
+        ArrayList<Episode> episodesArr = new ArrayList<>();
+        int numEpisodes = episodes.length();
+
+        for (int i = 0; i < numEpisodes; i++) {
+            try {
+                String epTitle = episodes.getJSONObject(i).getString("title");
+                int epSeason = episodes.getJSONObject(i).getInt("season");
+                int epEpNumber = episodes.getJSONObject(i).getInt("episodeNumber");
+                Date epAirdate = buildDateFromYYYYMMDD(episodes.getJSONObject(i).getString("airdate"));
+                Boolean epWatched = episodes.getJSONObject(i).getBoolean("watched");
+                Episode episode = new Episode(epTitle, epSeason, epEpNumber, epAirdate, epWatched);
+                episodesArr.add(episode);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return episodesArr;
+    }
+
+    // Date in form yyyy-mm-dd
+    private Date buildDateFromYYYYMMDD(String airdate) {
+        Date date;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date = format.parse(airdate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return date;
     }
 
     @Override

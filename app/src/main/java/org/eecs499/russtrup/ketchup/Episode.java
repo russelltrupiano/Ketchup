@@ -3,9 +3,10 @@ package org.eecs499.russtrup.ketchup;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Episode implements Comparable{
+public class Episode implements Serializable, Comparable{
 
     private String TAG = Episode.class.getSimpleName();
 
