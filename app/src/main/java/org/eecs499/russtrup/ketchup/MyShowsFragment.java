@@ -108,7 +108,6 @@ public class MyShowsFragment extends ContentFragment
                     String resultNetwork = resultJson.optString("network", "???");
 
                     ArrayList<Episode> episodes = buildEpisodeArrayFromJson(resultJson.getJSONArray("episodes"));
-                    Log.i("MYSHOW", episodes.toString());
 
                     TVShow show = new TVShow(resultId, resultName, resultNetwork, resultDay, resultTime, resultImage);
                     show.importEpisodes(episodes);
