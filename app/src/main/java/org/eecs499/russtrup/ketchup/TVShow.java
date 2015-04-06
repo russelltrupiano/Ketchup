@@ -57,4 +57,32 @@ public class TVShow extends TVShowBase {
 
         return Arrays.copyOf(episodes.toArray(), episodes.size(), Episode[].class);
     }
+
+    // Return ALL episodes for a season with data baout watched and unwatched
+    public Episode[] get_episodes_for_season(int selectedSeason) {
+        ArrayList<Episode> seasonEpisodes = new ArrayList<>();
+
+        for (Episode e : _episodes) {
+            if (e.get_season() == selectedSeason) {
+                seasonEpisodes.add(e);
+            }
+        }
+
+        return Arrays.copyOf(seasonEpisodes.toArray(), seasonEpisodes.size(), Episode[].class);
+    }
+
+    public String[] get_seasons_array() {
+        int maxSeason = 1;
+        for (Episode e : _episodes) {
+            if (e.get_season() > maxSeason) {
+                maxSeason = e.get_season();
+            }
+        }
+        ArrayList<String> seasons = new ArrayList<>();
+        for (int i = 1; i <= maxSeason; i++) {
+            seasons.add("Season " + i);
+        }
+
+        return Arrays.copyOf(seasons.toArray(), seasons.size(), String[].class);
+    }
 }

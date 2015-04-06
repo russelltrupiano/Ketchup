@@ -4,6 +4,59 @@
     android:layout_height="match_parent"
     tools:context="org.eecs499.russtrup.ketchup.ShowInfoManageFragment">
 
-    <include layout="@layout/fragment_show_info_header"/>
+    <LinearLayout
+        android:id="@+id/show_info_header_wrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/fragment_show_info_header_condensed" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/show_info_header_wrapper"
+        android:id="@+id/relativeLayout">
+
+        <Spinner
+            android:id="@+id/season_spinner"
+            android:layout_width="200dp"
+            android:layout_height="44dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <ImageButton
+            android:id="@+id/markAllWatchedBtn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <ImageButton
+            android:id="@+id/markAllUnwatchedBtn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/markAllWatchedBtn"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/episode_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>

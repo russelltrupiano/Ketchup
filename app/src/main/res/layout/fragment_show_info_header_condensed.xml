@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/showInfoHeaderImage"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_alignParentStart="true"
+        android:background="#37FDFC" />
+
+    <View
+        android:id="@+id/showInfoHeaderTextBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/showInfoHeaderImage"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/showInfoAirTime"
+        android:layout_marginTop="-16dp"
+        android:background="@color/imageTextBackground" />
+
+    <TextView
+        android:id="@+id/showInfoShowName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/showInfoHeaderImage"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="Show Name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/showInfoNetwork"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/showInfoAirTime"
+        android:layout_alignBottom="@+id/showInfoHeaderImage"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Network"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/showInfoAirTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:text="Day @ Time"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_above="@+id/showInfoShowName"
+        android:layout_alignParentEnd="true"
+        android:textSize="14sp" />
+
+</RelativeLayout>

@@ -17,7 +17,7 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
     // Showid for API request
     private static String mShowId;
     private Episode[] mEpisodes;
-    private Context mContext;
+    private static Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -51,14 +51,22 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
                 _itemView = itemView;
             }
 
+            public void setButtonSource() {
+                if (!mEpisode.get_watched()) {
+                    mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_accept));
+                } else {
+                    mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_remove));
+                }
+            }
+
             @Override
             public void invokeCallback(JSONObject response) throws JSONException {
-
+                setButtonSource();
             }
 
             @Override
             public void onFail() {
-
+                setButtonSource();
             }
         }
     }

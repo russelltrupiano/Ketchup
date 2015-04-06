@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -21,7 +26,11 @@ import android.widget.TextView;
  */
 public class ShowInfoManageFragment extends ShowInfoFragment {
 
+    private int _selectedSeason;
     private TVShow _tvshow;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -60,11 +69,46 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
         TextView showInfoHeaderNetwork = (TextView) theView.findViewById(R.id.showInfoNetwork);
         TextView showInfoHeaderAirtime = (TextView) theView.findViewById(R.id.showInfoAirTime);
 
+        Spinner seasonSpinner = (Spinner) theView.findViewById(R.id.season_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
+                android.R.layout.simple_spinner_dropdown_item, _tvshow.get_seasons_array());
+        seasonSpinner.setAdapter(adapter);
+
+        seasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                // position is 0-indexed, and seasons never skip
+                _selectedSeason = position + 1;
+
+                mAdapter = new EpisodeListAdapter(_tvshow.get_id(),
+                        _tvshow.get_episodes_for_season(_selectedSeason), getActivity().getApplicationContext());
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         // TODO: Get landscape image for this view
 //        showInfoHeaderImage = ????
         showInfoHeaderTitle.setText(_tvshow.get_title());
         showInfoHeaderNetwork.setText(_tvshow.get_network());
         showInfoHeaderAirtime.setText(_tvshow.get_airday() + " @ " + _tvshow.get_airtime());
+
+        mRecyclerView = (RecyclerView) theView.findViewById(R.id.episode_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // Default Setting
+        _selectedSeason = 1;
+        mAdapter = new EpisodeListAdapter(_tvshow.get_id(),
+                _tvshow.get_episodes_for_season(_selectedSeason), getActivity().getApplicationContext());
+        mRecyclerView.setAdapter(mAdapter);
 
         return theView;
     }
