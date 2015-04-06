@@ -222,12 +222,15 @@ public class MyShowsFragment extends ContentFragment
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void removeShow(Fragment fragment) {
+    public void removeShow(Fragment fragment, TVShow tvshow) {
         FragmentManager fragmentManager =  getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.remove(fragment);
         fragmentTransaction.commit();
         numShows--;
+
+        myShows.remove(tvshow);
+        User.get_instance().updateSubscriptions(myShows);
     }
 
 }

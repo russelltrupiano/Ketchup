@@ -7,7 +7,8 @@
     <LinearLayout
         android:id="@+id/show_info_header_wrapper"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="4dp">
 
         <include layout="@layout/fragment_show_info_header_condensed" />
     </LinearLayout>

@@ -6,12 +6,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.melnykov.fab.ObservableScrollView;
 import com.squareup.picasso.Picasso;
 
 
@@ -62,7 +68,8 @@ public class ShowInfoUnwatchedFragment extends ShowInfoFragment {
         // Inflate the layout for this fragment
         View theView =  inflater.inflate(R.layout.fragment_show_info_unwatched, container, false);
 
-        ImageView showInfoHeaderImage = (ImageView) theView.findViewById(R.id.showInfoHeaderImage);
+        final ImageView showInfoHeaderImage = (ImageView) theView.findViewById(R.id.showInfoHeaderImage);
+        final LinearLayout headerImageWrapper = (LinearLayout) theView.findViewById(R.id.image_header_wrapper);
         TextView showInfoHeaderTitle = (TextView) theView.findViewById(R.id.showInfoShowName);
         TextView showInfoHeaderNetwork = (TextView) theView.findViewById(R.id.showInfoNetwork);
         TextView showInfoHeaderAirtime = (TextView) theView.findViewById(R.id.showInfoAirTime);
@@ -80,10 +87,22 @@ public class ShowInfoUnwatchedFragment extends ShowInfoFragment {
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new EpisodeListAdapter(_tvshow.get_id(), _tvshow.get_unwatched_episodes(), getActivity().getApplicationContext());
+        mAdapter = new EpisodeListAdapter(_tvshow.get_id(), _tvshow.get_unwatched_episodes(), getActivity().getApplicationContext(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         return theView;
+    }
+
+    public int pxToDp(int px) {
+        DisplayMetrics displayMetrics = getActivity().getApplicationContext().getResources().getDisplayMetrics();
+        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return dp;
+    }
+
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = getActivity().getApplicationContext().getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
     }
 
     @Override
@@ -103,6 +122,12 @@ public class ShowInfoUnwatchedFragment extends ShowInfoFragment {
         mListener = null;
     }
 
+    @Override
+    public void updateModel() {
+        mAdapter = new EpisodeListAdapter(_tvshow.get_id(), _tvshow.get_unwatched_episodes(), getActivity().getApplicationContext(), this);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -116,5 +141,4 @@ public class ShowInfoUnwatchedFragment extends ShowInfoFragment {
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(Uri uri);
     }
-
 }

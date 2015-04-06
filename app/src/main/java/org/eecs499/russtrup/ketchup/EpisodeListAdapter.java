@@ -19,6 +19,8 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
     private static String mShowId;
     private Episode[] mEpisodes;
     private static Context mContext;
+    private ShowInfoFragment mContainerFragment;
+    private View mView;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -36,10 +38,11 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
         }
     }
 
-    public EpisodeListAdapter(String showId, Episode[] episodes, Context context) {
+    public EpisodeListAdapter(String showId, Episode[] episodes, Context context, ShowInfoFragment containerFragment) {
         mShowId = showId;
         mEpisodes = episodes;
         mContext = context;
+        mContainerFragment = containerFragment;
     }
 
     // Create new views (invoked by the layout manager)
@@ -47,6 +50,8 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
     public EpisodeListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_show_info_episode_list_item, parent, false);
+
+        mView = v;
 
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -100,6 +105,9 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
                         mShowId, holder.mEpisode.get_season(), holder.mEpisode.get_episodeNumber(),
                         !holder.mEpisode.get_watched(), new UpdateEpisodeCallback(v));
                 holder.mEpisode.set_watched(!holder.mEpisode.get_watched());
+                if (mContainerFragment.getClass().isAssignableFrom(ShowInfoUnwatchedFragment.class)) {
+                    mContainerFragment.updateModel();
+                }
             }
         });
     }

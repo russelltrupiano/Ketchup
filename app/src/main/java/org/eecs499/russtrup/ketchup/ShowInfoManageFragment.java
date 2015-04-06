@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,9 +84,7 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
                 // position is 0-indexed, and seasons never skip
                 _selectedSeason = position + 1;
 
-                mAdapter = new EpisodeListAdapter(_tvshow.get_id(),
-                        _tvshow.get_episodes_for_season(_selectedSeason), getActivity().getApplicationContext());
-                mRecyclerView.setAdapter(mAdapter);
+                updateModel();
             }
 
             @Override
@@ -110,7 +109,7 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
         // Default Setting
         _selectedSeason = 1;
         mAdapter = new EpisodeListAdapter(_tvshow.get_id(),
-                _tvshow.get_episodes_for_season(_selectedSeason), getActivity().getApplicationContext());
+                _tvshow.get_episodes_for_season(_selectedSeason), getActivity().getApplicationContext(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         return theView;
@@ -131,6 +130,13 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void updateModel() {
+        mAdapter = new EpisodeListAdapter(_tvshow.get_id(),
+                _tvshow.get_episodes_for_season(_selectedSeason), getActivity().getApplicationContext(), this);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     /**

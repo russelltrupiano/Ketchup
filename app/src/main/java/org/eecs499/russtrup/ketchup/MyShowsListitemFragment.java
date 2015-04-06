@@ -156,7 +156,7 @@ public class MyShowsListitemFragment extends Fragment {
 
         @Override
         public void invokeCallback(JSONObject response) {
-            _parent.removeShow(_instance);
+            _parent.removeShow(_instance, _tvshow);
         }
 
         @Override

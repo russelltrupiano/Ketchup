@@ -28,6 +28,8 @@ public class ShowInfoActivity extends ActionBarActivity implements
     private ViewPager pager;
     private ViewPagerAdapter pagerAdapter;
     private TVShow _tvshow;
+    private ShowInfoFragment _unwatchedFragment, _manageFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class ShowInfoActivity extends ActionBarActivity implements
             public void onPageSelected(int position) {
                 // when user do a swipe the selected tab change
                 tabHost.setSelectedNavigationItem(position);
+                updateFragmentModels(position);
             }
         });
 
@@ -83,8 +86,12 @@ public class ShowInfoActivity extends ActionBarActivity implements
         }
         public Fragment getItem(int num) {
             switch(num) {
-                case 0: return ShowInfoUnwatchedFragment.newInstance(_tvshow);
-                case 1: return ShowInfoManageFragment.newInstance(_tvshow);
+                case 0:
+                    _unwatchedFragment = ShowInfoUnwatchedFragment.newInstance(_tvshow);
+                    return _unwatchedFragment;
+                case 1:
+                    _manageFragment = ShowInfoManageFragment.newInstance(_tvshow);
+                    return _manageFragment;
                 default: return null;
             }
         }
@@ -102,10 +109,24 @@ public class ShowInfoActivity extends ActionBarActivity implements
         }
     }
 
+    public void updateFragmentModels(int position) {
+        switch(position) {
+            case 0:
+                _unwatchedFragment.updateModel();
+                break;
+            case 1:
+                _manageFragment.updateModel();
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     public void onTabSelected(MaterialTab tab) {
         // when the tab is clicked the pager swipe content to the tab position
         pager.setCurrentItem(tab.getPosition());
+        updateFragmentModels(tab.getPosition());
     }
 
     @Override

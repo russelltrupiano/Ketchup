@@ -20,7 +20,8 @@
         android:id="@+id/secondaryToolbarWrapper"
         android:layout_below="@+id/toolbarWrapper"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="4dp">
 
         <!-- Secondary application toolbar-->
         <include

@@ -2,6 +2,7 @@ package org.eecs499.russtrup.ketchup;
 
 import android.net.Uri;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -12,12 +13,6 @@ import android.support.v4.app.Fragment;
  */
 public abstract class ShowInfoFragment extends Fragment {
 
-    public interface EpisodeManager {
-        public void markEpisodeWatched();
-        public void markEpisodesWatched();
-        public void markEpisodeUnatched();
-        public void markEpisodesUnatched();
-        public void updateEpisodeData(Episode episode, Boolean value);
-        public void updateEpisodeData(Episode[] episodes, Boolean value);
-    }
+    public abstract void updateModel();
+
 }
