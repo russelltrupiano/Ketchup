@@ -69,4 +69,14 @@ public class TVShow extends TVShowBase {
 
         return Arrays.copyOf(seasons.toArray(), seasons.size(), String[].class);
     }
+
+    public int get_num_unwatched() {
+        int count = 0;
+        for (Episode e : _episodes) {
+            if (!e.get_watched()) {
+                count++;
+            }
+        }
+        return count;
+    }
 }

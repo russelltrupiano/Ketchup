@@ -58,6 +58,9 @@ public class MyShowsListitemFragment extends Fragment {
             Picasso.with(_context).load(_tvshow.get_imageUrl()).into(thumbnail);
         }
 
+        ImageView unwatchedBadge = (ImageView) theView.findViewById(R.id.myshow_unwatced_count_image);
+        setUnwatchedBadge(unwatchedBadge, _tvshow.get_num_unwatched());
+
         RelativeLayout itemLayout = (RelativeLayout)theView.findViewById(R.id.itemLayout);
         itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +102,44 @@ public class MyShowsListitemFragment extends Fragment {
         _instance = this;
 
         return theView;
+    }
+
+    private void setUnwatchedBadge(ImageView unwatchedBadge, int num_unwatched) {
+        switch(num_unwatched) {
+            case 0:
+                break;
+            case 1:
+                unwatchedBadge.setImageDrawable(getActivity().getDrawable(R.drawable.numeric_1_box));
+                break;
+            case 2:
+                unwatchedBadge.setImageDrawable(getActivity().getDrawable(R.drawable.numeric_2_box));
+                break;
+            case 3:
+                unwatchedBadge.setImageDrawable(getActivity().getDrawable(R.drawable.numeric_3_box));
+                break;
+            case 4:
+                unwatchedBadge.setImageDrawable(getActivity().getDrawable(R.drawable.numeric_4_box));
+                break;
+            case 5:
+                unwatchedBadge.setImageDrawable(getActivity().getDrawable(R.drawable.numeric_5_box));
+                break;
+            case 6:
+                unwatchedBadge.setImageDrawable(getActivity().getDrawable(R.drawable.numeric_6_box));
+                break;
+            case 7:
+                unwatchedBadge.setImageDrawable(getActivity().getDrawable(R.drawable.numeric_7_box));
+                break;
+            case 8:
+                unwatchedBadge.setImageDrawable(getActivity().getDrawable(R.drawable.numeric_8_box));
+                break;
+            case 9:
+                unwatchedBadge.setImageDrawable(getActivity().getDrawable(R.drawable.numeric_9_box));
+                break;
+            default:
+                //9+
+                unwatchedBadge.setImageDrawable(getActivity().getDrawable(R.drawable.numeric_9_plus_box));
+                break;
+        }
     }
 
     public void setParent(MyShowsFragment parent) {
