@@ -334,8 +334,8 @@ public class KetchupAPI extends Application {
 
         Log.i("SUBSCRIBING", "Trying to subscribe to show with id " + showid);
 
-        HashMap<String, Integer> params = new HashMap<>();
-        params.put("show_id", Integer.parseInt(showid));
+        HashMap<String, String> params = new HashMap<>();
+        params.put("show_id", showid);
 
         JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/subscribe", new JSONObject(params),
                 new Response.Listener<JSONObject>() {
@@ -366,8 +366,8 @@ public class KetchupAPI extends Application {
 
     public static void unsubscribeToShow(String showid, final HTTPCallback callback) {
 
-        HashMap<String, Integer> params = new HashMap<>();
-        params.put("show_id", Integer.parseInt(showid));
+        HashMap<String, String> params = new HashMap<>();
+        params.put("show_id", showid);
 
         JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/unsubscribe", new JSONObject(params),
                 new Response.Listener<JSONObject>() {
@@ -409,7 +409,7 @@ public class KetchupAPI extends Application {
                 "\"id\":\"" + showId + "\"," +
                 "\"episodes\":[{" +
                     "\"season\":" + seasonNumber + "," +
-                    "\"episodeNumber\":" + episodeNumber + "," +
+                    "\"number\":" + episodeNumber + "," +
                     "\"watched\":" + watched + "}]" +
                 "}]}");
         params.put("shows", showData.toString());
@@ -456,7 +456,7 @@ public class KetchupAPI extends Application {
         for (int i = 1; i <= numEpisodes; i++) {
             showData.append("{" +
                     "\"season\":" + seasonNumber + "," +
-                    "\"episodeNumber\":" + i + "," +
+                    "\"number\":" + i + "," +
                     "\"watched\":" + watched + "}");
             if (i != numEpisodes) {
                 showData.append(",");

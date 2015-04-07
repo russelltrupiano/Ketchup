@@ -6,16 +6,22 @@ import java.util.Date;
 
 public class TVShow extends TVShowBase {
 
+    String _network;
+    String _airday;
+    String _airtime;
     String _imageUrl;
     String _headerUrl;
 
     ArrayList<Episode> _episodes;
 
     public TVShow(String id, String title, String network, String airday, String airtime, String imageUrl, String headerUrl) {
-        super(id, title, network, airday, airtime);
+        super(id, title);
         _imageUrl = imageUrl;
         _headerUrl = headerUrl;
         _episodes = new ArrayList<>();
+        _network = network;
+        _airday = airday;
+        _airtime = formatTime(airtime);
     }
 
     public Episode getNextEpisode() {
@@ -24,6 +30,18 @@ public class TVShow extends TVShowBase {
 
     public void importEpisodes(ArrayList<Episode> episodes) {
         _episodes = new ArrayList<>(episodes);
+    }
+
+    public String get_network() {
+        return _network;
+    }
+
+    public String get_airday() {
+        return _airday;
+    }
+
+    public String get_airtime() {
+        return _airtime;
     }
 
     public String get_imageUrl() {

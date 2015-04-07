@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,6 +37,7 @@ public class ShowInfoUnwatchedFragment extends ShowInfoFragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private FrameLayout mHeaderImageWrapper;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -70,7 +72,7 @@ public class ShowInfoUnwatchedFragment extends ShowInfoFragment {
         View theView = inflater.inflate(R.layout.fragment_show_info_unwatched, container, false);
 
         final ImageView showInfoHeaderImage = (ImageView) theView.findViewById(R.id.showInfoHeaderImage);
-        final LinearLayout headerImageWrapper = (LinearLayout) theView.findViewById(R.id.image_header_wrapper);
+        mHeaderImageWrapper = (FrameLayout) theView.findViewById(R.id.image_header_wrapper);
         TextView showInfoHeaderTitle = (TextView) theView.findViewById(R.id.showInfoShowName);
         TextView showInfoHeaderNetwork = (TextView) theView.findViewById(R.id.showInfoNetwork);
         TextView showInfoHeaderAirtime = (TextView) theView.findViewById(R.id.showInfoAirTime);

@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,9 +66,12 @@ public class SearchResultFragment extends Fragment {
         // Inflate the layout for this fragment
         final View theView = inflater.inflate(R.layout.fragment_search_result, container, false);
 
-        ((TextView) theView.findViewById(R.id.showTitle)).setText(_tvshowbase.get_title());
-        ((TextView) theView.findViewById(R.id.showTime)).setText(_tvshowbase.get_airday() + " @ " + _tvshowbase.get_airtime());
-        ((TextView) theView.findViewById(R.id.showNetwork)).setText(_tvshowbase.get_network());
+        ((TextView) theView.findViewById(R.id.showTitle)).setText(_tvshowbase.get_title() + " (" + _tvshowbase.get_year() + ")");
+        ImageView background = (ImageView) theView.findViewById(R.id.search_result_image);
+
+        if (_tvshowbase.get_background_url() != null && !_tvshowbase.get_background_url().equals("")) {
+            Picasso.with(getActivity().getApplicationContext()).load(_tvshowbase.get_background_url()).into(background);
+        }
 
         if (User.get_instance().subscribedTo(_tvshowbase)) {
             Log.i(TAG, "Subscribed to " + _tvshowbase.get_title());

@@ -4,15 +4,14 @@
     android:layout_height="match_parent"
     tools:context="org.eecs499.russtrup.ketchup.ShowInfoManageFragment">
 
-
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/show_info_header_wrapper"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp">
 
         <include layout="@layout/fragment_show_info_header" />
-    </LinearLayout>
+    </FrameLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/episode_recycler_view"
@@ -20,5 +19,6 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/show_info_header_wrapper"
         android:scrollbars="vertical" />
+
 
 </RelativeLayout>

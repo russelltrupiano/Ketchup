@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.melnykov.fab.FloatingActionButton;
 import com.melnykov.fab.ObservableScrollView;
 
+import org.apache.http.HttpException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,31 +84,36 @@ public class MyShowsFragment extends ContentFragment
         @Override
         public void invokeCallback(JSONObject response) {
             FragmentManager fragmentManager =  getFragmentManager();
-            JSONArray results;
+            JSONArray shows;
 
             try {
-                results = response.getJSONArray("shows");
-            } catch (JSONException e) {
+                if (response.getInt("status") != 200) {
+                    throw new HttpException(response.getInt("status") + ": REQUEST FAILED");
+                }
+                shows = response.getJSONArray("shows");
+                Log.i("MY_SHOWS", shows.toString());
+
+            } catch (JSONException | HttpException e) {
                 e.printStackTrace();
                 return;
             }
 
-            if (results.length() == 0) {
+            if (shows.length() == 0) {
                 redirectView.findViewById(R.id.noShowsPrompt).setVisibility(View.VISIBLE);
             }
 
-            for (int i = 0; i < results.length(); i++) {
+            for (int i = 0; i < shows.length(); i++) {
 
                 try {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                     MyShowsListitemFragment result = new MyShowsListitemFragment();
 
-                    JSONObject resultJson = (JSONObject)results.get(i);
+                    JSONObject resultJson = (JSONObject)shows.get(i);
                     String resultId = resultJson.getString("id");
                     String resultName = resultJson.getString("title");
-                    String resultImage = resultJson.getString("imageUrl");
-                    String resultHeader = resultJson.getString("headerUrl");
+                    String resultImage = resultJson.getString("image_url");
+                    String resultHeader = resultJson.getString("banner_url");
                     String resultTime = resultJson.getString("airtime");
                     String resultDay = resultJson.optString("airday", "???");
                     String resultNetwork = resultJson.optString("network", "???");
@@ -146,9 +152,10 @@ public class MyShowsFragment extends ContentFragment
 
         for (int i = 0; i < numEpisodes; i++) {
             try {
+                int epId = episodes.getJSONObject(i).getInt("id");
                 String epTitle = episodes.getJSONObject(i).getString("title");
                 int epSeason = episodes.getJSONObject(i).getInt("season");
-                int epEpNumber = episodes.getJSONObject(i).getInt("episodeNumber");
+                int epEpNumber = episodes.getJSONObject(i).getInt("number");
                 Date epAirdate = buildDateFromYYYYMMDD(episodes.getJSONObject(i).getString("airdate"));
                 Boolean epWatched = episodes.getJSONObject(i).getBoolean("watched");
                 Episode episode = new Episode(epTitle, epSeason, epEpNumber, epAirdate, epWatched);
@@ -162,6 +169,11 @@ public class MyShowsFragment extends ContentFragment
 
     // Date in form yyyy-mm-dd
     private Date buildDateFromYYYYMMDD(String airdate) {
+
+        if (airdate == null) {
+            return null;
+        }
+
         Date date;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {

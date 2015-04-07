@@ -198,9 +198,9 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
     @Override
     public void updateModel() {
         mAdapter.notifyDataSetChanged();
-//        mAdapter = new EpisodeListAdapter(_tvshow.get_id(),
-//                _tvshow.get_episodes_for_season(_selectedSeason), getActivity().getApplicationContext(), this);
-//        mRecyclerView.setAdapter(mAdapter);
+        mAdapter = new EpisodeListAdapter(_tvshow.get_id(),
+                _tvshow.get_episodes_for_season(_selectedSeason), getActivity().getApplicationContext(), this);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     /**
