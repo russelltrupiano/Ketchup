@@ -334,8 +334,8 @@ public class KetchupAPI extends Application {
 
         Log.i("SUBSCRIBING", "Trying to subscribe to show with id " + showid);
 
-        HashMap<String, Integer> params = new HashMap<>();
-        params.put("show_id", Integer.parseInt(showid));
+        HashMap<String, String> params = new HashMap<>();
+        params.put("show_id", showid);
 
         JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/subscribe", new JSONObject(params),
                 new Response.Listener<JSONObject>() {
