@@ -1,6 +1,5 @@
 package org.eecs499.russtrup.ketchup;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,16 +13,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.ViewHolder> {
 
     // Showid for API request
     private static String mShowId;
-    private Episode[] mEpisodes;
-    private static ArrayList<EpisodeListAdapter.ViewHolder> mViews;
+    private ArrayList<Episode> mEpisodes;
     private static Context mContext;
     private ShowInfoFragment mContainerFragment;
-    private View mView;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -43,10 +41,9 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
 
     public EpisodeListAdapter(String showId, Episode[] episodes, Context context, ShowInfoFragment containerFragment) {
         mShowId = showId;
-        mEpisodes = episodes;
+        mEpisodes = new ArrayList<Episode>(Arrays.asList(episodes));
         mContext = context;
         mContainerFragment = containerFragment;
-        mViews = new ArrayList<>();
     }
 
     // Create new views (invoked by the layout manager)
@@ -55,20 +52,18 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_show_info_episode_list_item, parent, false);
 
-        mView = v;
-
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final EpisodeListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final EpisodeListAdapter.ViewHolder holder, final int position) {
         // - replace the contents of the view with that element
-        holder.mEpisodeTitle.setText(mEpisodes[position].get_title() + " (" +
-                mEpisodes[position].get_season() + "x" + mEpisodes[position].get_episodeNumber() + ")");
-        holder.mAirdateTime.setText(mEpisodes[position].get_airdate().toString());
-        holder.mEpisode = mEpisodes[position];
+        holder.mEpisodeTitle.setText(mEpisodes.get(position).get_title() + " (" +
+                mEpisodes.get(position).get_season() + "x" + mEpisodes.get(position).get_episodeNumber() + ")");
+        holder.mAirdateTime.setText(mEpisodes.get(position).get_airdate().toString());
+        holder.mEpisode = mEpisodes.get(position);
         if (!holder.mEpisode.get_watched()) {
             holder.mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_accept));
         } else {
@@ -90,12 +85,14 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
                     holder.mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_remove));
                 }
                 if (mContainerFragment.getClass().isAssignableFrom(ShowInfoUnwatchedFragment.class)) {
-                    mContainerFragment.updateModel();
+                    mEpisodes.remove(holder.mEpisode);
+                    notifyDataSetChanged();
                 }
             }
 
             @Override
             public void invokeCallback(JSONObject response) throws JSONException {
+                holder.mEpisode.set_watched(!holder.mEpisode.get_watched());
                 setButtonSource();
             }
 
@@ -112,15 +109,13 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
                 KetchupAPI.updateEpisode(
                         mShowId, holder.mEpisode.get_season(), holder.mEpisode.get_episodeNumber(),
                         !holder.mEpisode.get_watched(), new UpdateEpisodeCallback(v));
-                holder.mEpisode.set_watched(!holder.mEpisode.get_watched());
-
             }
         });
     }
 
     public void batchUpdate(Boolean watched) {
-        for (int i = 0; i < mEpisodes.length; i++) {
-            mEpisodes[i].set_watched(watched);
+        for (Episode mEpisode : mEpisodes) {
+            mEpisode.set_watched(watched);
         }
     }
 
@@ -128,6 +123,6 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mEpisodes.length;
+        return mEpisodes.size();
     }
 }

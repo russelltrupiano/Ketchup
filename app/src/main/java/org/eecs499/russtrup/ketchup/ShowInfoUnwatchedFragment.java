@@ -67,7 +67,7 @@ public class ShowInfoUnwatchedFragment extends ShowInfoFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View theView =  inflater.inflate(R.layout.fragment_show_info_unwatched, container, false);
+        View theView = inflater.inflate(R.layout.fragment_show_info_unwatched, container, false);
 
         final ImageView showInfoHeaderImage = (ImageView) theView.findViewById(R.id.showInfoHeaderImage);
         final LinearLayout headerImageWrapper = (LinearLayout) theView.findViewById(R.id.image_header_wrapper);

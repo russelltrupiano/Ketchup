@@ -146,13 +146,13 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
 
         @Override
         public void invokeCallback(JSONObject response) throws JSONException {
-            ((EpisodeListAdapter)mAdapter).batchUpdate(true);
+            ((EpisodeListAdapter) mAdapter).batchUpdate(true);
             updateModel();
         }
 
         @Override
         public void onFail() {
-            ((EpisodeListAdapter)mAdapter).batchUpdate(false);
+            ((EpisodeListAdapter) mAdapter).batchUpdate(false);
             updateModel();
         }
     }
@@ -167,13 +167,13 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
 
         @Override
         public void invokeCallback(JSONObject response) throws JSONException {
-            ((EpisodeListAdapter)mAdapter).batchUpdate(false);
+            ((EpisodeListAdapter) mAdapter).batchUpdate(false);
             updateModel();
         }
 
         @Override
         public void onFail() {
-            ((EpisodeListAdapter)mAdapter).batchUpdate(true);
+            ((EpisodeListAdapter) mAdapter).batchUpdate(true);
             updateModel();
         }
     }
@@ -197,9 +197,10 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
 
     @Override
     public void updateModel() {
-        mAdapter = new EpisodeListAdapter(_tvshow.get_id(),
-                _tvshow.get_episodes_for_season(_selectedSeason), getActivity().getApplicationContext(), this);
-        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+//        mAdapter = new EpisodeListAdapter(_tvshow.get_id(),
+//                _tvshow.get_episodes_for_season(_selectedSeason), getActivity().getApplicationContext(), this);
+//        mRecyclerView.setAdapter(mAdapter);
     }
 
     /**

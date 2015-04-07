@@ -35,7 +35,7 @@ public class FailedSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_failed_search, container, false);
-        retryButton = (Button)v.findViewById(R.id.retry_button);
+        retryButton = (Button) v.findViewById(R.id.retry_button);
         return v;
     }
 
