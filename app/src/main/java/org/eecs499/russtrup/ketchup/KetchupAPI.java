@@ -366,8 +366,8 @@ public class KetchupAPI extends Application {
 
     public static void unsubscribeToShow(String showid, final HTTPCallback callback) {
 
-        HashMap<String, Integer> params = new HashMap<>();
-        params.put("show_id", Integer.parseInt(showid));
+        HashMap<String, String> params = new HashMap<>();
+        params.put("show_id", showid);
 
         JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/unsubscribe", new JSONObject(params),
                 new Response.Listener<JSONObject>() {
