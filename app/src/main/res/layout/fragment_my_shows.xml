@@ -42,4 +42,14 @@
         android:layout_alignEnd="@+id/myShowsScrollView"
         android:layout_marginBottom="26dp" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/noShowsPrompt"
+        android:src="@drawable/startscreen"
+        android:visibility="invisible"
+        android:layout_marginTop="150dp"
+        android:layout_below="@+id/myShowsScrollView"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

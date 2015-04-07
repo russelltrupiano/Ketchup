@@ -12,11 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -72,6 +76,23 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
         TextView showInfoHeaderNetwork = (TextView) theView.findViewById(R.id.showInfoNetwork);
         TextView showInfoHeaderAirtime = (TextView) theView.findViewById(R.id.showInfoAirTime);
 
+        ImageButton markAllWatchedBtn = (ImageButton) theView.findViewById(R.id.markAllWatchedBtn);
+        ImageButton markAllUnwatchedBtn = (ImageButton) theView.findViewById(R.id.markAllUnwatchedBtn);
+
+        markAllWatchedBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KetchupAPI.batchUpdateEpisode(_tvshow.get_id(), _selectedSeason, mAdapter.getItemCount(), true, new AllWatchedCallback(v));
+
+            }
+        });
+        markAllUnwatchedBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KetchupAPI.batchUpdateEpisode(_tvshow.get_id(), _selectedSeason, mAdapter.getItemCount(), false, new AllUnwatchedCallback(v));
+            }
+        });
+
         Spinner seasonSpinner = (Spinner) theView.findViewById(R.id.season_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
                 android.R.layout.simple_spinner_dropdown_item, _tvshow.get_seasons_array());
@@ -113,6 +134,48 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
         mRecyclerView.setAdapter(mAdapter);
 
         return theView;
+    }
+
+    private class AllWatchedCallback implements KetchupAPI.HTTPCallback {
+
+        View mView;
+
+        public AllWatchedCallback(View v) {
+            mView = v;
+        }
+
+        @Override
+        public void invokeCallback(JSONObject response) throws JSONException {
+            ((EpisodeListAdapter)mAdapter).batchUpdate(true);
+            updateModel();
+        }
+
+        @Override
+        public void onFail() {
+            ((EpisodeListAdapter)mAdapter).batchUpdate(false);
+            updateModel();
+        }
+    }
+
+    private class AllUnwatchedCallback implements KetchupAPI.HTTPCallback {
+
+        View mView;
+
+        public AllUnwatchedCallback(View v) {
+            mView = v;
+        }
+
+        @Override
+        public void invokeCallback(JSONObject response) throws JSONException {
+            ((EpisodeListAdapter)mAdapter).batchUpdate(false);
+            updateModel();
+        }
+
+        @Override
+        public void onFail() {
+            ((EpisodeListAdapter)mAdapter).batchUpdate(true);
+            updateModel();
+        }
     }
 
     @Override

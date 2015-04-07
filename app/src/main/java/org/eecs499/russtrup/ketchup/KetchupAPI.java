@@ -441,4 +441,56 @@ public class KetchupAPI extends Application {
 
         KetchupAPI.getInstance().addToRequestQueue(req);
     }
+
+    public static void batchUpdateEpisode(String showId, int seasonNumber, int numEpisodes,
+                                     boolean watched, final HTTPCallback callback) {
+        Log.i("UPDATING", "Marking " + seasonNumber + "x1-" + numEpisodes + " - " +
+                showId + " to " + (watched ? "watched" : "unwatched"));
+
+        HashMap<String, String> params = new HashMap<>();
+        StringBuilder showData = new StringBuilder();
+
+        // Build POST params
+        showData.append("{\"shows\":[{\"id\":\"" + showId + "\",\"episodes\":[");
+
+        for (int i = 1; i <= numEpisodes; i++) {
+            showData.append("{" +
+                    "\"season\":" + seasonNumber + "," +
+                    "\"episodeNumber\":" + i + "," +
+                    "\"watched\":" + watched + "}");
+            if (i != numEpisodes) {
+                showData.append(",");
+            }
+        }
+
+        showData.append("]}]}");
+        params.put("shows", showData.toString());
+
+        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" +
+                KetchupAPI.getUserDetails().get("authToken") + "/episodes", new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i("HTTP SUB SUCCESS", response.toString());
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                            callback.invokeCallback(response);
+                        } catch (JSONException e) {
+                            Log.i("HTTP EXCEPTION", e.getMessage());
+                            e.printStackTrace();
+                            callback.onFail();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                callback.onFail();
+            }
+        });
+
+        KetchupAPI.getInstance().addToRequestQueue(req);
+    }
 }

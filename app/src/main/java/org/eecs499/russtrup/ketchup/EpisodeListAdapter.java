@@ -13,11 +13,14 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.ViewHolder> {
 
     // Showid for API request
     private static String mShowId;
     private Episode[] mEpisodes;
+    private static ArrayList<EpisodeListAdapter.ViewHolder> mViews;
     private static Context mContext;
     private ShowInfoFragment mContainerFragment;
     private View mView;
@@ -43,6 +46,7 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
         mEpisodes = episodes;
         mContext = context;
         mContainerFragment = containerFragment;
+        mViews = new ArrayList<>();
     }
 
     // Create new views (invoked by the layout manager)
@@ -61,7 +65,8 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
     @Override
     public void onBindViewHolder(final EpisodeListAdapter.ViewHolder holder, int position) {
         // - replace the contents of the view with that element
-        holder.mEpisodeTitle.setText(mEpisodes[position].get_title());
+        holder.mEpisodeTitle.setText(mEpisodes[position].get_title() + " (" +
+                mEpisodes[position].get_season() + "x" + mEpisodes[position].get_episodeNumber() + ")");
         holder.mAirdateTime.setText(mEpisodes[position].get_airdate().toString());
         holder.mEpisode = mEpisodes[position];
         if (!holder.mEpisode.get_watched()) {
@@ -84,6 +89,9 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
                 } else {
                     holder.mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_remove));
                 }
+                if (mContainerFragment.getClass().isAssignableFrom(ShowInfoUnwatchedFragment.class)) {
+                    mContainerFragment.updateModel();
+                }
             }
 
             @Override
@@ -105,13 +113,16 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
                         mShowId, holder.mEpisode.get_season(), holder.mEpisode.get_episodeNumber(),
                         !holder.mEpisode.get_watched(), new UpdateEpisodeCallback(v));
                 holder.mEpisode.set_watched(!holder.mEpisode.get_watched());
-                if (mContainerFragment.getClass().isAssignableFrom(ShowInfoUnwatchedFragment.class)) {
-                    mContainerFragment.updateModel();
-                }
+
             }
         });
     }
 
+    public void batchUpdate(Boolean watched) {
+        for (int i = 0; i < mEpisodes.length; i++) {
+            mEpisodes[i].set_watched(watched);
+        }
+    }
 
 
     // Return the size of your dataset (invoked by the layout manager)

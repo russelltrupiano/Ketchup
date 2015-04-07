@@ -92,6 +92,10 @@ public class MyShowsFragment extends ContentFragment
                 return;
             }
 
+            if (results.length() == 0) {
+                redirectView.findViewById(R.id.noShowsPrompt).setVisibility(View.VISIBLE);
+            }
+
             for (int i = 0; i < results.length(); i++) {
 
                 try {
