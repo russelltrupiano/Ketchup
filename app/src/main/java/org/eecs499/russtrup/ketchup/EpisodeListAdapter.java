@@ -61,7 +61,7 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
         // - replace the contents of the view with that element
         holder.mEpisodeTitle.setText(mEpisodes.get(position).get_title() + " (" +
                 mEpisodes.get(position).get_season() + "x" + mEpisodes.get(position).get_episodeNumber() + ")");
-        holder.mAirdateTime.setText(mEpisodes.get(position).get_airdate().toString());
+        holder.mAirdateTime.setText(mEpisodes.get(position).get_airdate() == null ? "TBD" : mEpisodes.get(position).get_airdate().toString());
         holder.mEpisode = mEpisodes.get(position);
         if (!holder.mEpisode.get_watched()) {
             holder.mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_accept));

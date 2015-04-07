@@ -152,9 +152,10 @@ public class MyShowsFragment extends ContentFragment
 
         for (int i = 0; i < numEpisodes; i++) {
             try {
+                int epId = episodes.getJSONObject(i).getInt("id");
                 String epTitle = episodes.getJSONObject(i).getString("title");
                 int epSeason = episodes.getJSONObject(i).getInt("season");
-                int epEpNumber = episodes.getJSONObject(i).getInt("episodeNumber");
+                int epEpNumber = episodes.getJSONObject(i).getInt("number");
                 Date epAirdate = buildDateFromYYYYMMDD(episodes.getJSONObject(i).getString("airdate"));
                 Boolean epWatched = episodes.getJSONObject(i).getBoolean("watched");
                 Episode episode = new Episode(epTitle, epSeason, epEpNumber, epAirdate, epWatched);
@@ -168,6 +169,11 @@ public class MyShowsFragment extends ContentFragment
 
     // Date in form yyyy-mm-dd
     private Date buildDateFromYYYYMMDD(String airdate) {
+
+        if (airdate == null) {
+            return null;
+        }
+
         Date date;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {

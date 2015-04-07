@@ -409,7 +409,7 @@ public class KetchupAPI extends Application {
                 "\"id\":\"" + showId + "\"," +
                 "\"episodes\":[{" +
                     "\"season\":" + seasonNumber + "," +
-                    "\"episodeNumber\":" + episodeNumber + "," +
+                    "\"number\":" + episodeNumber + "," +
                     "\"watched\":" + watched + "}]" +
                 "}]}");
         params.put("shows", showData.toString());
@@ -456,7 +456,7 @@ public class KetchupAPI extends Application {
         for (int i = 1; i <= numEpisodes; i++) {
             showData.append("{" +
                     "\"season\":" + seasonNumber + "," +
-                    "\"episodeNumber\":" + i + "," +
+                    "\"number\":" + i + "," +
                     "\"watched\":" + watched + "}");
             if (i != numEpisodes) {
                 showData.append(",");
