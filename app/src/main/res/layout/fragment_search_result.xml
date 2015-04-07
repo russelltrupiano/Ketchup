@@ -2,46 +2,54 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/searchResultItem"
     android:layout_width="fill_parent"
-    android:layout_height="80dp"
+    android:layout_height="88dp"
     android:layout_marginBottom="5dp"
     android:layout_marginTop="5dp"
     android:background="#454545">
+
+    <FrameLayout
+        android:id="@+id/search_result_image_wrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="88dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/search_result_image"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="true"
+            android:background="@color/cardview_dark_background"
+            android:maxHeight="88dp"
+            android:scaleType="centerCrop" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/search_result_image_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:background="@color/imageTextBackground" />
 
     <TextView
         android:id="@+id/showTitle"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_alignBottom="@+id/image_header_wrapper"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
         android:ellipsize="marquee"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:text="Better Call Saul"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/showTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/showTitle"
-        android:layout_below="@+id/showTitle"
-        android:layout_marginTop="6dp"
-        android:text="Monday @ 10:00 PM"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/showNetwork"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/showTime"
-        android:layout_below="@+id/showTime"
-        android:layout_marginTop="0dp"
-        android:text="AMC"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:text="Show Name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/addShowBtn"

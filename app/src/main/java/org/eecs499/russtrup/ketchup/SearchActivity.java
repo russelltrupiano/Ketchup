@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import org.apache.http.HttpException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -212,7 +213,12 @@ public class SearchActivity extends ActionBarActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             try {
-                JSONArray results = response.getJSONArray("shows");
+
+                if (response.getInt("status") != 200) {
+                    throw new HttpException(response.getInt("status") + ": Request Failed");
+                }
+
+                JSONArray results = response.getJSONArray("result");
 
                 for (int i = 0; i < results.length(); i++) {
 
@@ -223,13 +229,12 @@ public class SearchActivity extends ActionBarActivity
                     resultFragments.add(result);
 
                     JSONObject resultJson = (JSONObject) results.get(i);
-                    String resultId = (String) resultJson.getJSONArray("showid").get(0);
-                    String resultName = (String) resultJson.getJSONArray("name").get(0);
-                    String resultTime = (String) resultJson.getJSONArray("airtime").get(0);
-                    String resultDay = (String) resultJson.getJSONArray("airday").get(0);
-                    String resultNetwork = resultJson.getString("network");
+                    String resultId = (String) resultJson.getString("id");
+                    String resultName = (String) resultJson.getString("title");
+                    int resultYear = (int) resultJson.getInt("year");
+                    String resultBackground = (String) resultJson.getString("background");
 
-                    TVShowBase show = new TVShowBase(resultId, resultName, resultNetwork, resultDay, resultTime);
+                    TVShowBase show = new TVShowBase(resultId, resultName, resultYear, resultBackground);
                     result.set_tvshowbase(show);
                     searchResults.add(show);
 
@@ -239,7 +244,7 @@ public class SearchActivity extends ActionBarActivity
                     numResults++;
                 }
 
-            } catch (JSONException | IllegalStateException e) {
+            } catch (JSONException | IllegalStateException | HttpException e) {
                 e.printStackTrace();
             }
         }

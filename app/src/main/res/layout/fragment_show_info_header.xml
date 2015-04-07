@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/image_header_wrapper"
         android:layout_width="fill_parent"
         android:layout_height="200dp"
@@ -20,7 +20,7 @@
             android:background="@color/cardview_dark_background"
             android:maxHeight="200dp"
             android:scaleType="centerCrop" />
-    </LinearLayout>
+    </FrameLayout>
 
     <View
         android:id="@+id/showInfoHeaderTextBackground"

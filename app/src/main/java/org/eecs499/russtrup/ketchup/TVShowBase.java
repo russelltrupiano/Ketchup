@@ -14,16 +14,19 @@ public class TVShowBase implements Serializable, Comparable{
 
     String _id;
     String _title;
-    String _network;
-    String _airday;
-    String _airtime;
+    int _year;
+    String _background_url;
 
-    public TVShowBase(String _id, String _title, String _network, String _airday, String _airtime) {
+    public TVShowBase(String _id, String _title, int _year, String _background_url) {
         this._id = _id;
         this._title = _title;
-        this._network = _network;
-        this._airday = _airday;
-        this._airtime = formatTime(_airtime);
+        this._year = _year;
+        this._background_url = _background_url;
+    }
+
+    public TVShowBase(String _id, String _title) {
+        this._id = _id;
+        this._title = _title;
     }
 
     public String get_id() {
@@ -34,16 +37,13 @@ public class TVShowBase implements Serializable, Comparable{
         return _title;
     }
 
-    public String get_network() {
-        return _network;
+    public String get_background_url() {
+        return _background_url;
     }
 
-    public String get_airday() {
-        return _airday;
-    }
+    public int get_year() {
 
-    public String get_airtime() {
-        return _airtime;
+        return _year;
     }
 
     protected String formatTime(String time) {

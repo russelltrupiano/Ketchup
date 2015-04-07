@@ -40,6 +40,8 @@
         android:layout_height="fill_parent"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/searchBox"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -57,9 +59,9 @@
         android:id="@+id/loading_spinner"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:visibility="invisible"
-        android:contentDescription="loading spinner"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:contentDescription="loading spinner"
+        android:visibility="invisible" />
 
 </RelativeLayout>
