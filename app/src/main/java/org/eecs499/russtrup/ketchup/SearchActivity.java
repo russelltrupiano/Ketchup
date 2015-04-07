@@ -229,10 +229,10 @@ public class SearchActivity extends ActionBarActivity
                     resultFragments.add(result);
 
                     JSONObject resultJson = (JSONObject) results.get(i);
-                    String resultId = (String) resultJson.getString("id");
-                    String resultName = (String) resultJson.getString("title");
-                    int resultYear = (int) resultJson.getInt("year");
-                    String resultBackground = (String) resultJson.getString("background");
+                    String resultId = resultJson.getString("id");
+                    String resultName = resultJson.getString("title");
+                    int resultYear = resultJson.optInt("year", 0);
+                    String resultBackground = resultJson.optString("background", "");
 
                     TVShowBase show = new TVShowBase(resultId, resultName, resultYear, resultBackground);
                     result.set_tvshowbase(show);
