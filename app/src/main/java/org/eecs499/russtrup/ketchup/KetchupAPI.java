@@ -312,7 +312,7 @@ public class KetchupAPI extends Application {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.i("HTTP POPULAR SUCCESS", response.toString());
+                            Log.i("HTTP SEARCH SUCCESS", response.toString());
                             VolleyLog.v("Response:%n %s", response.toString(4));
                             callback.invokeCallback(response);
                         } catch (JSONException e) {

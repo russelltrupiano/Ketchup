@@ -12,12 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -27,15 +22,65 @@ public class MyShowsListitemFragment extends Fragment {
     private MyShowsFragment _parent;
     private Context _context;
     private MyShowsListitemFragment _instance;
+    private View _view;
     private OnFragmentInteractionListener mListener;
 
     public MyShowsListitemFragment() {
         // Required empty public constructor
     }
 
+    public View get_view() {
+        return _view;
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment ShowInfoManageFragment.
+     */
+    public static MyShowsListitemFragment newInstance(MyShowsFragment parent) {
+        MyShowsListitemFragment fragment = new MyShowsListitemFragment();
+        fragment.init(parent);
+        return fragment;
+    }
+
+    private void init(MyShowsFragment parent) {
+        setParent(parent);
+        _context = getActivity().getApplicationContext();
+        _instance = this;
+        LayoutInflater inflater = (LayoutInflater)_context.getSystemService (Context.LAYOUT_INFLATER_SERVICE);
+        ViewGroup container = (ViewGroup)_parent.get_view().findViewById(R.id.myShowsList);
+        _view = inflater.inflate(R.layout.fragment_my_shows_listitem, container, false);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    public void loadShowInfo() {
+        MainActivity.loadShowInfo(getActivity(), _tvshow);
+    }
+
+    public void unsubClickListener() {
+        PopupMenu popupMenu = new PopupMenu(_context, (FrameLayout) _view.findViewById(R.id.unsubscribe_menu_wrapper));
+        popupMenu.getMenuInflater().inflate(R.menu.menu_myshows_unsubscribe, popupMenu.getMenu());
+
+
+        //registering popup with OnMenuItemClickListener
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.menu_unsubscribe) {
+                    Log.i("UNSUB", "Unsubbing from id " + _tvshow.get_id() + " - " + _tvshow.get_title());
+                    KetchupAPI.unsubscribeToShow(_tvshow.get_id(), new UnsubscribeCallback(_view));
+                    return true;
+                }
+                return true;
+            }
+        });
+        popupMenu.show();
     }
 
     @Override
@@ -44,67 +89,68 @@ public class MyShowsListitemFragment extends Fragment {
         // Inflate the layout for this fragment
         final View theView = inflater.inflate(R.layout.fragment_my_shows_listitem, container, false);
 
-        if (_tvshow == null) {return theView;}
+//        if (_tvshow == null) {return theView;}
 
-        _context = getActivity().getApplicationContext();
+//        _context = getActivity().getApplicationContext();
 
-        ((TextView) theView.findViewById(R.id.showTitle)).setText(_tvshow.get_title());
-        ((TextView) theView.findViewById(R.id.showTime)).setText(_tvshow.get_airday() + " @ " + _tvshow.get_airtime());
-        ((TextView) theView.findViewById(R.id.showNetwork)).setText(_tvshow.get_network());
+//        ((TextView) theView.findViewById(R.id.showTitle)).setText(_tvshow.get_title());
+//        ((TextView) theView.findViewById(R.id.showTime)).setText(_tvshow.get_airday() + " @ " + _tvshow.get_airtime());
+//        ((TextView) theView.findViewById(R.id.showNetwork)).setText(_tvshow.get_network());
+//
+//        ImageView thumbnail = (ImageView) theView.findViewById(R.id.showThumbnail);
+//
+//        if (_tvshow.get_imageUrl() != null && !_tvshow.get_imageUrl().equals("")) {
+//            Picasso.with(_context).load(_tvshow.get_imageUrl()).into(thumbnail);
+//        }
+//
+//        ImageView unwatchedBadge = (ImageView) theView.findViewById(R.id.myshow_unwatced_count_image);
+//        setUnwatchedBadge(unwatchedBadge, _tvshow.get_num_unwatched());
+//
+//        RelativeLayout itemLayout = (RelativeLayout)theView.findViewById(R.id.itemLayout);
+//        itemLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainActivity.loadShowInfo(getActivity(), _tvshow);
+//            }
+//        });
+//        theView.findViewById(R.id.showTitle).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainActivity.loadShowInfo(getActivity(), _tvshow);
+//            }
+//        });
+//
+//        final ImageButton optionsExpander = (ImageButton) theView.findViewById(R.id.item_options);
+//        optionsExpander.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PopupMenu popupMenu = new PopupMenu(_context, (FrameLayout)theView.findViewById(R.id.unsubscribe_menu_wrapper));
+//                popupMenu.getMenuInflater().inflate(R.menu.menu_myshows_unsubscribe, popupMenu.getMenu());
+//
+//
+//                //registering popup with OnMenuItemClickListener
+//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        int id = item.getItemId();
+//                        if (id == R.id.menu_unsubscribe) {
+//                            Log.i("UNSUB", "Unsubbing from id " + _tvshow.get_id() + " - " + _tvshow.get_title());
+//                            KetchupAPI.unsubscribeToShow(_tvshow.get_id(), new UnsubscribeCallback(theView));
+//                            return true;
+//                        }
+//                        return true;
+//                    }
+//                });
+//                popupMenu.show();
+//            }
+//        });
 
-        ImageView thumbnail = (ImageView) theView.findViewById(R.id.showThumbnail);
-
-        if (_tvshow.get_imageUrl() != null && !_tvshow.get_imageUrl().equals("")) {
-            Picasso.with(_context).load(_tvshow.get_imageUrl()).into(thumbnail);
-        }
-
-        ImageView unwatchedBadge = (ImageView) theView.findViewById(R.id.myshow_unwatced_count_image);
-        setUnwatchedBadge(unwatchedBadge, _tvshow.get_num_unwatched());
-
-        RelativeLayout itemLayout = (RelativeLayout)theView.findViewById(R.id.itemLayout);
-        itemLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.loadShowInfo(getActivity(), _tvshow);
-            }
-        });
-        theView.findViewById(R.id.showTitle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.loadShowInfo(getActivity(), _tvshow);
-            }
-        });
-
-        final ImageButton optionsExpander = (ImageButton) theView.findViewById(R.id.item_options);
-        optionsExpander.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(_context, (FrameLayout)theView.findViewById(R.id.unsubscribe_menu_wrapper));
-                popupMenu.getMenuInflater().inflate(R.menu.menu_myshows_unsubscribe, popupMenu.getMenu());
-
-
-                //registering popup with OnMenuItemClickListener
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        int id = item.getItemId();
-                        if (id == R.id.menu_unsubscribe) {
-                            Log.i("UNSUB", "Unsubbing from id " + _tvshow.get_id() + " - " + _tvshow.get_title());
-                            KetchupAPI.unsubscribeToShow(_tvshow.get_id(), new UnsubscribeCallback(theView));
-                            return true;
-                        }
-                        return true;
-                    }
-                });
-                popupMenu.show();
-            }
-        });
-
-        _instance = this;
+//        _instance = this;
+//        _view = theView;
 
         return theView;
     }
 
-    private void setUnwatchedBadge(ImageView unwatchedBadge, int num_unwatched) {
+    public void setUnwatchedBadge(ImageView unwatchedBadge, int num_unwatched) {
         switch(num_unwatched) {
             case 0:
                 break;

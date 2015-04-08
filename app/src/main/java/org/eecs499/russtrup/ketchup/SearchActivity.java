@@ -161,13 +161,20 @@ public class SearchActivity extends ActionBarActivity
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case (android.R.id.home):
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 return true;
             case (R.id.action_settings):
                 return true;

@@ -148,13 +148,20 @@ public class ShowInfoActivity extends ActionBarActivity implements
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.card_back_in, R.anim.card_back_out);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch(item.getItemId()) {
             case(android.R.id.home):
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
+                overridePendingTransition(R.anim.card_back_in, R.anim.card_back_out);
                 return true;
             case(R.id.action_settings):
                 return true;

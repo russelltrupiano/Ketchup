@@ -222,6 +222,6 @@ public class MainActivity extends BaseActivity
         Intent i = new Intent(c, ShowInfoActivity.class);
         i.putExtra("tvshow", tvshow);
         c.startActivity(i);
-        ((Activity) c).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        ((Activity) c).overridePendingTransition(R.anim.card_in_right, R.anim.card_out_right);
     }
 }

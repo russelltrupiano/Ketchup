@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -42,6 +45,10 @@ public class MyShowsFragment extends ContentFragment
     private int numShows;
     private Collection<TVShow> myShows;
     private MyShowsFragment instance;
+    private View mView;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     /**
      * Use this factory method to create a new instance of
@@ -58,6 +65,10 @@ public class MyShowsFragment extends ContentFragment
 
     public MyShowsFragment() {
         // Required empty public constructor
+    }
+
+    public View get_view() {
+        return mView;
     }
 
     @Override
@@ -191,6 +202,8 @@ public class MyShowsFragment extends ContentFragment
         // Inflate the layout for this fragment
         View theView = inflater.inflate(R.layout.fragment_my_shows, container, false);
 
+        mView = theView;
+
         KetchupAPI.getMyShows(new MyShowsCallback(theView));
 
         FloatingActionButton fab = (FloatingActionButton) theView.findViewById(R.id.fab);
@@ -203,6 +216,16 @@ public class MyShowsFragment extends ContentFragment
                 MainActivity.loadSearch(getActivity());
             }
         });
+
+        mRecyclerView = (RecyclerView) theView.findViewById(R.id.myShowsList);
+        mRecyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // Default Setting
+        mAdapter = new TVShowListAdapter(this, Arrays.copyOf(myShows.toArray(), myShows.size(), TVShow[].class), getActivity().getApplicationContext());
+        mRecyclerView.setAdapter(mAdapter);
 
         return theView;
     }
@@ -247,6 +270,10 @@ public class MyShowsFragment extends ContentFragment
 
         myShows.remove(tvshow);
         User.get_instance().updateSubscriptions(myShows);
+
+        if (numShows == 0) {
+            mView.findViewById(R.id.noShowsPrompt).setVisibility(View.VISIBLE);
+        }
     }
 
 }
