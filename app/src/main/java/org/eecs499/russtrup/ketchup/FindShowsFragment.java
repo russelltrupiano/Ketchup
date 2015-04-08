@@ -14,6 +14,8 @@ import android.widget.EditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,15 +26,8 @@ import org.json.JSONObject;
  * create an instance of this fragment.
  */
 public class FindShowsFragment extends ContentFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    ArrayList<TVShowBase> _popularShows;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -43,12 +38,9 @@ public class FindShowsFragment extends ContentFragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment FindShowsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static FindShowsFragment newInstance(String param1, String param2) {
         FindShowsFragment fragment = new FindShowsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,10 +52,7 @@ public class FindShowsFragment extends ContentFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        _popularShows = new ArrayList<>();
     }
 
     @Override
@@ -74,10 +63,22 @@ public class FindShowsFragment extends ContentFragment {
         return inflater.inflate(R.layout.fragment_find_shows, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private class PopularShowsCallback implements KetchupAPI.HTTPCallback {
+
+        View mView;
+
+        public PopularShowsCallback(View view) {
+            mView = view;
+        }
+
+        @Override
+        public void invokeCallback(JSONObject response) throws JSONException {
+
+        }
+
+        @Override
+        public void onFail() {
+
         }
     }
 
@@ -109,7 +110,6 @@ public class FindShowsFragment extends ContentFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 }

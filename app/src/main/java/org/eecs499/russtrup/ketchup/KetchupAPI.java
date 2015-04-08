@@ -302,6 +302,39 @@ public class KetchupAPI extends Application {
         KetchupAPI.getInstance().addToRequestQueue(req);
     }
 
+    public static void searchPopularShows(final HTTPCallback callback ) {
+
+        Log.i("HTTP REQ", KetchupAPI.baseUrl + "/popular");
+
+        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/popular", null,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i("HTTP POPULAR SUCCESS", response.toString());
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                            callback.invokeCallback(response);
+                        } catch (JSONException e) {
+                            Log.i("HTTP EXCEPTION", e.getMessage());
+                            e.printStackTrace();
+                            callback.onFail();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                callback.onFail();
+            }
+        });
+
+        req.setRetryPolicy(new DefaultRetryPolicy(45000, 2, 1.0f));
+
+        KetchupAPI.getInstance().addToRequestQueue(req);
+    }
+
     public static void getMyShows(final HTTPCallback callback) {
         JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/shows", null,
                 new Response.Listener<JSONObject>() {
