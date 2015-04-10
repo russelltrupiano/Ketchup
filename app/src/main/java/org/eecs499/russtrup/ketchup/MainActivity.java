@@ -54,6 +54,7 @@ public class MainActivity extends BaseActivity
             if (regid.isEmpty()) {
                 new Register().execute();
             } else {
+                sendRegistrationIdToBackend(regid);
                 if (KetchupAPI.checkLogin()) {
                     loadCurrentFragment();
                 }
@@ -81,7 +82,7 @@ public class MainActivity extends BaseActivity
                 // so it can use GCM/HTTP or CCS to send messages to your app.
                 // The request to your server should be authenticated if your app
                 // is using accounts.
-//                    sendRegistrationIdToBackend();
+                sendRegistrationIdToBackend(regid);
                 Log.i("REGID", regid);
 
                 // For this demo: we don't need to send it because the device
@@ -105,6 +106,10 @@ public class MainActivity extends BaseActivity
                 loadCurrentFragment();
             }
         }
+    }
+
+    private void sendRegistrationIdToBackend(String regid) {
+        KetchupAPI.registerUser(regid);
     }
 
     private void storeRegistrationId(Context context, String regId) {
@@ -134,8 +139,8 @@ public class MainActivity extends BaseActivity
             Log.i("GCM", "App version changed.");
             return "";
         }
-        return "";
-//        return registrationId;
+//        return "";
+        return registrationId;
     }
 
     private int getAppVersion(Context context) {

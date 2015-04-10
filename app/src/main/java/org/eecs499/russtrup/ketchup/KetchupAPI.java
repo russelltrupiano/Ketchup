@@ -187,8 +187,8 @@ public class KetchupAPI extends Application {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("HTTP ERROR", error.getMessage());
-                VolleyLog.e("Error: ", error.getMessage());
+                Log.i("HTTP ERROR", error.toString());
+                VolleyLog.e("Error: ", error.toString());
                 callback.onFail();
             }
         });
@@ -234,6 +234,35 @@ public class KetchupAPI extends Application {
     public static boolean checkLogin() {
         Log.i("SESSION", "checking login");
         return session.checkLogin();
+    }
+
+
+    public static void registerUser(String regid) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("app_id", regid);
+
+        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/register", new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i("HTTP SUB SUCCESS", response.toString());
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                        } catch (JSONException e) {
+                            Log.i("HTTP EXCEPTION", e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+            }
+        });
+
+        KetchupAPI.getInstance().addToRequestQueue(req);
     }
 
     public static HashMap<String, String> getUserDetails() {

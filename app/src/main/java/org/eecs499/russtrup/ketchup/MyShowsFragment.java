@@ -42,6 +42,7 @@ public class MyShowsFragment extends ContentFragment
     private int numShows;
     private Collection<TVShow> myShows;
     private MyShowsFragment instance;
+    private View mView;
 
     /**
      * Use this factory method to create a new instance of
@@ -204,6 +205,8 @@ public class MyShowsFragment extends ContentFragment
             }
         });
 
+        mView = theView;
+
         return theView;
     }
 
@@ -247,6 +250,10 @@ public class MyShowsFragment extends ContentFragment
 
         myShows.remove(tvshow);
         User.get_instance().updateSubscriptions(myShows);
+
+        if (numShows == 0) {
+            mView.findViewById(R.id.noShowsPrompt).setVisibility(View.VISIBLE);
+        }
     }
 
 }
