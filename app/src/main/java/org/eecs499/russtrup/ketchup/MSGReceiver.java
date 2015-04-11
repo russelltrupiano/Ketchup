@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
 
 public class MSGReceiver extends WakefulBroadcastReceiver {
     public MSGReceiver() {
@@ -19,8 +20,9 @@ public class MSGReceiver extends WakefulBroadcastReceiver {
         Intent msgrcv = new Intent("Msg");
         msgrcv.putExtra("msg", extras.getString("msg"));
         msgrcv.putExtra("title", extras.getString("title"));
-        msgrcv.putExtra("season", extras.getString("season"));
-        msgrcv.putExtra("episode_number", extras.getString("episode_number"));
+        msgrcv.putExtra("slug", extras.getString("slug"));
+        msgrcv.putExtra("season", Integer.valueOf(extras.getString("season")));
+        msgrcv.putExtra("episode_number", Integer.valueOf(extras.getString("episode_number")));
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(msgrcv);
         ComponentName comp = new ComponentName(context.getPackageName(), MSGService.class.getName());

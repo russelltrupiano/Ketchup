@@ -477,6 +477,8 @@ public class KetchupAPI extends Application {
                 "}]}");
         params.put("shows", showData.toString());
 
+        Log.i("URL", KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/episodes + POST: " + showData.toString());
+
         JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" +
                 KetchupAPI.getUserDetails().get("authToken") + "/episodes", new JSONObject(params),
                 new Response.Listener<JSONObject>() {
@@ -484,7 +486,7 @@ public class KetchupAPI extends Application {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.i("HTTP SUB SUCCESS", response.toString());
+                            Log.i("HTTP UPDATE SUCCESS", response.toString());
                             VolleyLog.v("Response:%n %s", response.toString(4));
                             callback.invokeCallback(response);
                         } catch (JSONException e) {

@@ -34,7 +34,10 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".MSGService" />
+        <service
+            android:name=".MSGService"
+            android:enabled="true"
+            android:label="MSGServiceLabel" />
 
         <activity
             android:name=".LoginActivity"
@@ -71,7 +74,6 @@
         <activity
             android:name=".ShowInfoActivity"
             android:label="@string/title_activity_show_info">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
