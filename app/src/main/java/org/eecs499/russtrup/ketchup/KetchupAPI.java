@@ -365,6 +365,7 @@ public class KetchupAPI extends Application {
     }
 
     public static void getMyShows(final HTTPCallback callback) {
+        String url = KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/shows";
         JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/shows", null,
                 new Response.Listener<JSONObject>() {
 

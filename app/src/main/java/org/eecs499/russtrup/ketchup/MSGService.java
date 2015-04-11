@@ -12,6 +12,8 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.util.Date;
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -53,6 +55,7 @@ public class MSGService extends IntentService {
                     } catch (NullPointerException npe) {
                         Log.i("MSGSVC", "msg is null :(");
                     }
+//                    sendNotif(extras.getString("title"), extras.getString("msg"));
                     sendNotification(extras.getString("title"), extras.getString("msg"));
                     Log.i("MSGSERIVCE", "Received: " + extras.getString("title") + " - " + extras.getString("msg"));
                     break;
@@ -60,6 +63,36 @@ public class MSGService extends IntentService {
         }
 
         MSGReceiver.completeWakefulIntent(intent);
+    }
+
+    private void sendNotif(String title, String msg){//}, int season, int episode_number) {
+
+        Log.i("NOTIF", "Notifying");
+
+        Intent myshowsIntent = new Intent(this, MainActivity.class);
+
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                    this,
+                    0,
+                    myshowsIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_notificication)
+                        .setContentTitle(title)
+                        .setContentText(msg);
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        // Sets an ID for the notification
+        int mNotificationId = 001;
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
     private void sendNotification(String title, String msg) {
@@ -90,15 +123,14 @@ public class MSGService extends IntentService {
         PendingIntent pAddShowToQueue = PendingIntent.getActivity(this, 1000, addShowToQueue, 0);
         PendingIntent pMarkShowWatched = PendingIntent.getActivity(this, 1000, markShowWatched, 0);
 
-
         notification = new NotificationCompat.Builder(this);
         notification.setContentTitle(title)
                     .setContentText(msg)
                     .setTicker(title)
                     .setSmallIcon(R.drawable.ic_notificication)
-                    .setContentInfo("Where will this go?")
                     .addAction(R.drawable.ic_action_new, "Add To Queue", pAddShowToQueue)
                     .addAction(R.drawable.ic_action_accept, "I'm Watching", pMarkShowWatched)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                     .setContentIntent(pMyShows)
                     .setAutoCancel(true);
 
@@ -110,6 +142,11 @@ public class MSGService extends IntentService {
         // Vibrate if vibrate is enabled
         notif.defaults |= Notification.DEFAULT_VIBRATE;
 
-        manager.notify(0, notif);
+        long time = new Date().getTime();
+        String tmpStr = String.valueOf(time);
+        String last4Str = tmpStr.substring(tmpStr.length() - 5);
+        int notificationId = Integer.valueOf(last4Str);
+
+        manager.notify(notificationId, notif);
     }
 }
