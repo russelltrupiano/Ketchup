@@ -8,6 +8,8 @@
     <color name="ripple">#ffffdc99</color>
     <color name="gradient_start">#838383</color>
     <color name="navItemBackground">#333333</color>
-    <color name="myShowItemBackground">#454545</color>
+    <!--<color name="myShowItemBackground">#454545</color>-->
+    <color name="emptySearchResultBackground">#181818</color>
+    <color name="myShowItemBackground">#232323</color>
     <color name="imageTextBackground">#77000000</color>
 </resources>

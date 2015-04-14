@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,8 @@ public class SearchResultFragment extends Fragment {
 
         if (_tvshowbase.get_background_url() != null && !_tvshowbase.get_background_url().equals("")) {
             Picasso.with(getActivity().getApplicationContext()).load(_tvshowbase.get_background_url()).into(background);
+        } else {
+            (theView.findViewById(R.id.search_result_image_background)).setBackgroundColor(getResources().getColor(R.color.emptySearchResultBackground));
         }
 
         if (User.get_instance().subscribedTo(_tvshowbase)) {

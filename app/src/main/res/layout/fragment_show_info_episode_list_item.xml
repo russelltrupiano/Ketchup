@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="55dp"
         android:layout_gravity="center"
-        card_view:cardBackgroundColor="@color/background_material_dark">
+        card_view:cardBackgroundColor="#232323">
 
         <RelativeLayout
             android:background="@drawable/myshow_list_item_ripple"

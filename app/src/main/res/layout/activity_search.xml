@@ -40,14 +40,16 @@
         android:layout_height="fill_parent"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/searchBox"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:background="#232323"
         android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/searchResultsList"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="#232323"
             android:orientation="vertical">
 
             <!-- Result fragments here -->

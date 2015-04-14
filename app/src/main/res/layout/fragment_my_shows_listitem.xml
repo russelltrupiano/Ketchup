@@ -1,94 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/itemLayout"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="80dp"
-    android:layout_marginBottom="5dp"
-    android:layout_marginTop="5dp"
-    android:background="@drawable/myshow_list_item_ripple">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="3dp"
+    android:layout_marginTop="3dp"
+    android:clickable="true"
+    android:background="?android:attr/selectableItemBackground"
+    card_view:cardBackgroundColor="#232323"
+    card_view:cardCornerRadius="3dp">
 
-    <LinearLayout
-        android:id="@+id/thumbnail_wrapper"
-        android:layout_width="53dp"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/itemLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="85dp">
+
+        <LinearLayout
+            android:id="@+id/thumbnail_wrapper"
+            android:layout_width="56dp"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/showThumbnail"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:adjustViewBounds="true"
+                android:background="#ffc2c1c5"
+                android:scaleType="centerCrop" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/showTitle"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/thumbnail_wrapper"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Better Call Saul"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/showTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/showTitle"
+            android:layout_below="@+id/showTitle"
+            android:layout_marginTop="6dp"
+            android:text="Monday @ 10:00 PM"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/showNetwork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/showTime"
+            android:layout_below="@+id/showTime"
+            android:layout_marginTop="0dp"
+            android:text="AMC"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <ImageButton
+            android:id="@+id/item_options"
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="11dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/myshow_list_item_ripple"
+            android:padding="5dp"
+            android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha" />
 
         <ImageView
-            android:id="@+id/showThumbnail"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentStart="true"
+            android:id="@+id/myshow_unwatced_count_image"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:adjustViewBounds="true"
-            android:background="#ffc2c1c5"
-            android:scaleType="centerCrop" />
-    </LinearLayout>
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp" />
 
-    <TextView
-        android:id="@+id/showTitle"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/thumbnail_wrapper"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:text="Better Call Saul"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <FrameLayout
+            android:id="@+id/unsubscribe_menu_wrapper"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_above="@+id/item_options"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal" />
 
-    <TextView
-        android:id="@+id/showTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/showTitle"
-        android:layout_below="@+id/showTitle"
-        android:layout_marginTop="6dp"
-        android:text="Monday @ 10:00 PM"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/showNetwork"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/showTime"
-        android:layout_below="@+id/showTime"
-        android:layout_marginTop="0dp"
-        android:text="AMC"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+</android.support.v7.widget.CardView>
 
-    <ImageButton
-        android:id="@+id/item_options"
-        android:layout_width="25dp"
-        android:layout_height="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="11dp"
-        android:layout_marginRight="6dp"
-        android:background="@drawable/myshow_list_item_ripple"
-        android:padding="5dp"
-        android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha" />
 
-    <ImageView
-        android:id="@+id/myshow_unwatced_count_image"
-        android:layout_width="27dp"
-        android:layout_height="27dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp" />
 
-    <FrameLayout
-        android:id="@+id/unsubscribe_menu_wrapper"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:layout_above="@+id/item_options"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="12dp"
-        android:orientation="horizontal" />
-
-</RelativeLayout>

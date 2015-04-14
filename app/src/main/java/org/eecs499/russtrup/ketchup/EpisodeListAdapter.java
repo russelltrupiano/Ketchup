@@ -12,8 +12,11 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.ViewHolder> {
 
@@ -61,7 +64,7 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
         // - replace the contents of the view with that element
         holder.mEpisodeTitle.setText(mEpisodes.get(position).get_title() + " (" +
                 mEpisodes.get(position).get_season() + "x" + mEpisodes.get(position).get_episodeNumber() + ")");
-        holder.mAirdateTime.setText(mEpisodes.get(position).get_airdate() == null ? "TBD" : mEpisodes.get(position).get_airdate().toString());
+        holder.mAirdateTime.setText(mEpisodes.get(position).get_airdate() == null ? "TBD" : formatAirdate(mEpisodes.get(position).get_airdate()));
         holder.mEpisode = mEpisodes.get(position);
         if (!holder.mEpisode.get_watched()) {
             holder.mUpdateButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_accept));
@@ -110,6 +113,13 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeListAdapter.
                         !holder.mEpisode.get_watched(), new UpdateEpisodeCallback(v));
             }
         });
+    }
+
+    private String formatAirdate(Date d) {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd yyy hh:mm a");
+        // TODO: This would be replaced with the user's timezone
+        sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        return sdf.format(d);
     }
 
     public void batchUpdate(Boolean watched) {
