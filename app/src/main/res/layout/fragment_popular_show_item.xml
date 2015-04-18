@@ -1,0 +1,66 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.eecs499.russtrup.ketchup.PopularShowItemFragment">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/show_thumbnail"
+            android:layout_width="133dp"
+            android:layout_height="200dp"
+            android:layout_marginRight="1dp"
+            android:background="#909090"
+            android:scaleType="centerCrop" />
+
+        <View
+            android:id="@+id/showInfoHeaderTextBackground"
+            android:layout_width="133dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="@color/imageTextBackground" />
+
+        <TextView
+            android:id="@+id/showTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="3dp"
+            android:maxLines="2"
+            android:maxWidth="80dp"
+            android:singleLine="false"
+            android:text="title"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="12sp" />
+
+        <ImageButton
+            android:id="@+id/findShowsSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#00000000"
+            android:src="@drawable/ic_plus"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/findShowsUnsub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#00000000"
+            android:src="@drawable/ic_cancel"
+            android:visibility="invisible" />
+
+
+    </FrameLayout>
+
+</FrameLayout>

@@ -34,7 +34,7 @@
         android:background="@color/imageTextBackground" />
 
     <TextView
-        android:id="@+id/showInfoShowName"
+        android:id="@+id/showTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/image_header_wrapper"
@@ -62,7 +62,7 @@
         android:id="@+id/showInfoAirTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/showInfoShowName"
+        android:layout_above="@+id/showTitle"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="16dp"
         android:text="Day @ Time"

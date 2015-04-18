@@ -1,7 +1,6 @@
 package org.eecs499.russtrup.ketchup;
 
 import android.app.Application;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -48,6 +47,7 @@ public class KetchupAPI extends Application {
     private static String sessionCookie;
 
     public static String baseUrl;
+
 
     public interface HTTPCallback {
         void invokeCallback(JSONObject response) throws JSONException;
@@ -333,9 +333,9 @@ public class KetchupAPI extends Application {
 
     public static void searchPopularShows(final HTTPCallback callback ) {
 
-        Log.i("HTTP REQ", KetchupAPI.baseUrl + "/popular");
+        Log.i("HTTP REQ", KetchupAPI.baseUrl + "/shows/popular");
 
-        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/popular", null,
+        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/shows/popular", null,
                 new Response.Listener<JSONObject>() {
 
                     @Override
@@ -363,6 +363,68 @@ public class KetchupAPI extends Application {
 
         KetchupAPI.getInstance().addToRequestQueue(req);
     }
+
+    public static void SearchFindShowsHelper(final HTTPCallback todayShowsCallback, final HTTPCallback popularShowsCallback) {
+
+        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/shows/today", null,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i("HTTP POPULAR SUCCESS", response.toString());
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                            todayShowsCallback.invokeCallback(response);
+                            searchPopularShows(popularShowsCallback);
+                        } catch (JSONException e) {
+                            Log.i("HTTP EXCEPTION", e.getMessage());
+                            e.printStackTrace();
+                            todayShowsCallback.onFail();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                todayShowsCallback.onFail();
+            }
+        });
+
+        req.setRetryPolicy(new DefaultRetryPolicy(45000, 2, 1.0f));
+
+        KetchupAPI.getInstance().addToRequestQueue(req);
+    }
+
+//    public static void SearchFindShowsHelper(HTTPCallback todayShowsCallback, HTTPCallback popularShowsCallback) {
+//        JsonObjectRequest req = new JsonObjectRequest(KetchupAPI.baseUrl + "/shows/today", null,
+//                new Response.Listener<JSONObject>() {
+//
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        try {
+//                            Log.i("HTTP POPULAR SUCCESS", response.toString());
+//                            VolleyLog.v("Response:%n %s", response.toString(4));
+//                            callback.invokeCallback(response);
+//                        } catch (JSONException e) {
+//                            Log.i("HTTP EXCEPTION", e.getMessage());
+//                            e.printStackTrace();
+//                            callback.onFail();
+//                        }
+//                    }
+//                }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                VolleyLog.e("Error: ", error.getMessage());
+//                callback.onFail();
+//            }
+//        });
+//
+//        req.setRetryPolicy(new DefaultRetryPolicy(45000, 2, 1.0f));
+//
+//        KetchupAPI.getInstance().addToRequestQueue(req);
+//    }
 
     public static void getMyShows(final HTTPCallback callback) {
         String url = KetchupAPI.baseUrl + "/" + KetchupAPI.getUserDetails().get("authToken") + "/shows";

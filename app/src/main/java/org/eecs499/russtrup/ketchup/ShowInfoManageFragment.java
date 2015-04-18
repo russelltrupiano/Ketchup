@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +71,7 @@ public class ShowInfoManageFragment extends ShowInfoFragment {
         View theView = inflater.inflate(R.layout.fragment_show_info_manage, container, false);
 
         ImageView showInfoHeaderImage = (ImageView) theView.findViewById(R.id.showInfoHeaderImage);
-        TextView showInfoHeaderTitle = (TextView) theView.findViewById(R.id.showInfoShowName);
+        TextView showInfoHeaderTitle = (TextView) theView.findViewById(R.id.showTitle);
         TextView showInfoHeaderNetwork = (TextView) theView.findViewById(R.id.showInfoNetwork);
         TextView showInfoHeaderAirtime = (TextView) theView.findViewById(R.id.showInfoAirTime);
 

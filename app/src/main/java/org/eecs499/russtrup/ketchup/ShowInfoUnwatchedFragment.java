@@ -7,19 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.melnykov.fab.ObservableScrollView;
 import com.squareup.picasso.Picasso;
 
 
@@ -73,7 +67,7 @@ public class ShowInfoUnwatchedFragment extends ShowInfoFragment {
 
         final ImageView showInfoHeaderImage = (ImageView) theView.findViewById(R.id.showInfoHeaderImage);
         mHeaderImageWrapper = (FrameLayout) theView.findViewById(R.id.image_header_wrapper);
-        TextView showInfoHeaderTitle = (TextView) theView.findViewById(R.id.showInfoShowName);
+        TextView showInfoHeaderTitle = (TextView) theView.findViewById(R.id.showTitle);
         TextView showInfoHeaderNetwork = (TextView) theView.findViewById(R.id.showInfoNetwork);
         TextView showInfoHeaderAirtime = (TextView) theView.findViewById(R.id.showInfoAirTime);
 

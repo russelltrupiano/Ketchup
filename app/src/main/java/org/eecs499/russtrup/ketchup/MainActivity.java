@@ -27,7 +27,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends BaseActivity
     implements  ContentFragment.OnFragmentInteractionListener,
-                MyShowsListitemFragment.OnFragmentInteractionListener {
+                MyShowsListitemFragment.OnFragmentInteractionListener,
+                PopularShowItemFragment.OnFragmentInteractionListener {
 
     GoogleCloudMessaging gcm;
     SharedPreferences prefs;
